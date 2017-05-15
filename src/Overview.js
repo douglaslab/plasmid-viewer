@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 var width = 500;
 var height = 500;
-var innerRadius = 100;
+var innerRadius = 120;
 var fontSize = 24;
 var arcPadding = 5;
 var arc = d3.arc();
@@ -42,6 +42,8 @@ class Overview extends Component {
         outerRadius: innerRadius + (fontSize + arcPadding) * stepIndex + fontSize,
         startAngle: (start / sequenceLength) * 2 * Math.PI,
         endAngle: (end / sequenceLength) * 2 * Math.PI,
+        startDegree: (start / sequenceLength) * 360,
+        endDegree: (end / sequenceLength) * 360,
         data: feature,
       }
     });
@@ -54,7 +56,14 @@ class Overview extends Component {
 
     arcs.append('path')
       .attr('d', arc)
-      .attr('fill', d => colors(d.data.name))
+      .attr('fill', d => colors(d.data.name));
+    arcs.append('text')
+      .attr('y', d => -d.innerRadius - fontSize / 2)
+      .attr('transform', d => 'rotate(' + ((d.startDegree + d.endDegree) / 2) + ')')
+      .attr('text-anchor', 'middle')
+      .attr('dy', '.35em')
+      .text(d => d.data.name);
+
   }
 
   render() {
