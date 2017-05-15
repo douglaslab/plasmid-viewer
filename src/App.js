@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 
+import Overview from './Overview';
 import data from './data/data.json';
 
 class App extends Component {
@@ -31,6 +32,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+        <Overview {...this.state} />
       </div>
     );
   }
