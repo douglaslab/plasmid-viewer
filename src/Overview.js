@@ -4,8 +4,9 @@ import _ from 'lodash';
 
 var width = 500;
 var height = 500;
-var innerRadius = 120;
-var fontSize = 24;
+var innerRadius = 150;
+var strandRadii = [135, 140];
+var fontSize = 20;
 var arcPadding = 5;
 var arc = d3.arc();
 var colors = d3.scaleOrdinal(d3.schemeCategory20);
@@ -33,21 +34,24 @@ class Overview extends Component {
     var sequenceLength = this.props.sequence.length;
     this.arcs = _.map(this.props.features, feature => {
       var {start, end} = feature;
-      var stepIndex = 0;
-      // while the previous end is bigger than current end, keep going up step index
-      while (radiiSteps[stepIndex] && radiiSteps[stepIndex] > start) {
-        stepIndex += 1;
+      var stepIndex = feature.arcStep || 0;
+
+      // if user-defined arcStep doesn't exist, then calculate stepIndex
+      if (feature.arcStep === undefined) {
+        // while the previous end is bigger than current end, keep going up step index
+        while (radiiSteps[stepIndex] && radiiSteps[stepIndex] > start) {
+          stepIndex += 1;
+        }
       }
       // once we find right step, remember current end
       radiiSteps[stepIndex] = end;
+      var labelStepIndex = feature.labelStep || stepIndex;
+
       var startAngle = (start / sequenceLength) * 2 * Math.PI;
       var endAngle = (end / sequenceLength) * 2 * Math.PI;
       if (start > end) {
         startAngle = -((sequenceLength - start) / sequenceLength) * 2 * Math.PI;
       }
-      var rotation = endAngle - (endAngle - startAngle) / 2;
-      rotation = rotation * (180 / Math.PI);
-
 
       // now create the arc
       return {
@@ -55,7 +59,8 @@ class Overview extends Component {
         outerRadius: innerRadius + fontSize * stepIndex / 2 + fontSize,
         startAngle,
         endAngle,
-        rotation,
+        labelRadius: innerRadius + fontSize * labelStepIndex / 2,
+        labelRotation: (startAngle + endAngle) / 2 * (180 / Math.PI),
         data: feature,
       }
     });
@@ -63,7 +68,6 @@ class Overview extends Component {
 
   // DNA strands
   renderStrands() {
-    var strandRadii = [105, 110];
     // def for text on circular path
     var defs = this.svg.append('defs');
     defs.selectAll('path')
@@ -92,19 +96,21 @@ class Overview extends Component {
   }
 
   renderArcs() {
-    var arcs = this.svg.selectAll('.arc')
-      .data(this.arcs).enter().append('g')
-      .classed('arc', true);
-
-    arcs.append('path')
+    this.svg.selectAll('.arc')
+      .data(this.arcs).enter().append('path')
+      .classed('arc', true)
       .attr('d', arc)
-      .attr('fill', d => colors(d.data.name))
+      .attr('fill', d => d.data.arcColor || colors(d.data.name))
       .attr('fill-opacity', 0.75);
-    arcs.append('text')
-      .attr('y', d => -d.innerRadius - fontSize / 2)
-      .attr('transform', d => 'rotate(' + d.rotation + ')')
+
+    this.svg.selectAll('.label')
+      .data(this.arcs).enter().append('text')
+      .classed('label', true)
+      .attr('y', d => -d.labelRadius - fontSize / 2)
+      .attr('transform', d => 'rotate(' + d.labelRotation + ')')
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
+      .attr('font-size', fontSize - 2)
       .text(d => d.data.name);
   }
 
