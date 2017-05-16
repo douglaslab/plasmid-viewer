@@ -29,21 +29,27 @@ class Overview extends Component {
       var {start, end} = feature;
       var stepIndex = 0;
       // while the previous end is bigger than current end, keep going up step index
-      while (radiiSteps[stepIndex] > start) {
+      while (radiiSteps[stepIndex] && radiiSteps[stepIndex] > start) {
         stepIndex += 1;
       }
       // once we find right step, remember current end
       radiiSteps[stepIndex] = end;
+      var startAngle = (start / sequenceLength) * 2 * Math.PI;
+      var endAngle = (end / sequenceLength) * 2 * Math.PI;
+      if (start > end) {
+        startAngle = -((sequenceLength - start) / sequenceLength) * 2 * Math.PI;
+      }
+      var rotation = endAngle - (endAngle - startAngle) / 2;
+      rotation = rotation * (180 / Math.PI);
 
-      // now create the arcs
 
+      // now create the arc
       return {
-        innerRadius: innerRadius + (fontSize + arcPadding) * stepIndex,
-        outerRadius: innerRadius + (fontSize + arcPadding) * stepIndex + fontSize,
-        startAngle: (start / sequenceLength) * 2 * Math.PI,
-        endAngle: (end / sequenceLength) * 2 * Math.PI,
-        startDegree: (start / sequenceLength) * 360,
-        endDegree: (end / sequenceLength) * 360,
+        innerRadius: innerRadius + fontSize * stepIndex / 2,
+        outerRadius: innerRadius + fontSize * stepIndex / 2 + fontSize,
+        startAngle,
+        endAngle,
+        rotation,
         data: feature,
       }
     });
@@ -56,10 +62,11 @@ class Overview extends Component {
 
     arcs.append('path')
       .attr('d', arc)
-      .attr('fill', d => colors(d.data.name));
+      .attr('fill', d => colors(d.data.name))
+      .attr('fill-opacity', 0.5);
     arcs.append('text')
       .attr('y', d => -d.innerRadius - fontSize / 2)
-      .attr('transform', d => 'rotate(' + ((d.startDegree + d.endDegree) / 2) + ')')
+      .attr('transform', d => 'rotate(' + d.rotation + ')')
       .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
       .text(d => d.data.name);

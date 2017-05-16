@@ -16,15 +16,16 @@ class App extends Component {
     var features = _.chain(data.features)
       .map(feature => {
         var {start, end} = feature;
-        if (!sequence[start] || !sequence[end]) return;
-        // TODO: account for end > start at one point
+        var subsequence = sequence.slice(start, end + 1);
+        if (start > end) {
+          // if start is bigger than end, it must mean the sequence wraps around
+          subsequence = sequence.slice(start) + sequence.slice(0, end + 1);
+        }
 
         return Object.assign(feature, {
-          sequence: sequence.slice(start, end),
+          sequence: subsequence,
         });
-      }).filter()
-      .sortBy(feature => feature.start)
-      .value();
+      }).filter().value();
 
     this.setState({features, sequence});
   }
