@@ -7,7 +7,11 @@ import data from './data/data.json';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {features: [], sequence: ''};
+    this.state = {
+      features: [],
+      sequence: '',
+      strand: 'double', // can be single or double
+    };
   }
 
   componentWillMount() {
