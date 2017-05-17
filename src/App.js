@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import * as d3 from 'd3';
 
 import Overview from './Overview';
+import Detail from './Detail';
 import data from './data/data.json';
+
+var colors = d3.scaleOrdinal(d3.schemeCategory20);
 
 class App extends Component {
   constructor(props) {
@@ -11,7 +15,11 @@ class App extends Component {
       features: [],
       sequence: '',
       strand: 'double', // can be single or double
+      windowWidth: 20, // number of translated protein sequence to show
+      selectedPhase: {},
     };
+
+    this.selectPhase = this.selectPhase.bind(this);
   }
 
   componentWillMount() {
@@ -19,7 +27,7 @@ class App extends Component {
     var sequence = data.sequence;
     var features = _.chain(data.features)
       .map(feature => {
-        var {start, end} = feature;
+        var {name, start, end, arcColor} = feature;
         var subsequence = sequence.slice(start, end + 1);
         if (start > end) {
           // if start is bigger than end, it must mean the sequence wraps around
@@ -28,16 +36,38 @@ class App extends Component {
 
         return Object.assign(feature, {
           sequence: subsequence,
+          arcColor: arcColor || colors(name),
         });
       }).filter().value();
 
-    this.setState({features, sequence});
+    // default selected phase to first
+    var selectedPhase = {
+      name: features[0].name,
+      start: 0,
+      end: Math.min(this.state.windowWidth, features[0].translation.length),
+    };
+
+    this.setState({features, sequence, selectedPhase});
+  }
+
+  selectPhase(phase) {
+    var selectedPhase = {
+      name: phase.name,
+      start: 0,
+      end: Math.min(this.state.windowWidth, phase.translation.length),
+    };
+    this.setState({selectedPhase});
   }
 
   render() {
+    var interactionProps = {
+      selectPhase: this.selectPhase
+    };
+
     return (
       <div className="App">
-        <Overview {...this.state} />
+        <Overview {...interactionProps} {...this.state} />
+        <Detail {...this.state} />
       </div>
     );
   }

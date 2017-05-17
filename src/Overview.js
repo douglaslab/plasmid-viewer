@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-var width = 500;
-var height = 500;
+var width = 400;
+var height = 400;
 var innerRadius = 150;
 var strandRadii = [135, 140];
 var fontSize = 20;
 var arcPadding = 5;
 var arc = d3.arc();
-var colors = d3.scaleOrdinal(d3.schemeCategory20);
 
 class Overview extends Component {
 
@@ -100,8 +99,9 @@ class Overview extends Component {
       .data(this.arcs).enter().append('path')
       .classed('arc', true)
       .attr('d', arc)
-      .attr('fill', d => d.data.arcColor || colors(d.data.name))
-      .attr('fill-opacity', 0.75);
+      .attr('fill', d => d.data.arcColor)
+      .attr('fill-opacity', 0.75)
+      .on('click', d => this.props.selectPhase(d.data));
 
     this.svg.selectAll('.label')
       .data(this.arcs).enter().append('text')
