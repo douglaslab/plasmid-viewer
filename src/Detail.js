@@ -20,7 +20,7 @@ class Detail extends Component {
     var maxLength = d3.max(this.props.features, feature => feature.translation.length);
     this.phasesScale = d3.scaleLinear()
       .domain([0, maxLength])
-      .range([fontSize / 2, width - fontSize / 2]);
+      .range([0, width - fontSize]);
     this.sequencesScale = d3.scaleLinear()
       .range([0, width - fontSize / 2]);
 
@@ -34,7 +34,8 @@ class Detail extends Component {
     this.brush = d3.brushX()
       .on('brush', this.onBrush);
     this.brushContainer = this.svg.append('g')
-      .classed('brush', true);
+      .classed('brush', true)
+      .call(this.brush);
 
     this.setupScaleAndBrush();
     this.renderPhase();
@@ -62,7 +63,7 @@ class Detail extends Component {
 
     // when there's a new feature, make sure brush extent updates to that new feature length
     this.brush.extent([[0, margin.top],
-      [this.phasesScale(this.feature.translation.length), margin.top + fontSize]]);
+      [this.phasesScale(this.feature.translation.length) + fontSize / 2, margin.top + fontSize]]);
     this.brushContainer.call(this.brush)
       .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
   }
@@ -75,7 +76,6 @@ class Detail extends Component {
 
     text.enter().append('text')
       .classed('phase', true)
-      .attr('text-anchor', 'middle')
       .attr('dy', '.35em')
       .style('font-size', fontSize)
       .merge(text)
@@ -106,15 +106,34 @@ class Detail extends Component {
     text.enter().append('text')
       .attr('dy', '.35em')
       .style('font-size', fontSize - 2)
-      .style('font-family', 'Courier')
       .merge(text)
       .attr('x', (d, i) => this.sequencesScale(i))
       .text(d => d);
   }
 
   onBrush() {
+    if (this.programmaticallyBrush) {
+      // have to do this so that d3 doesn't get into infinite loop
+      this.programmaticallyBrush = false;
+      return;
+    }
+
     var [x1, x2] = d3.event.selection;
-    console.log(x1, x2)
+    var start = Math.floor(this.phasesScale.invert(x1));
+    var end = Math.floor(this.phasesScale.invert(x2));
+
+    // user is not allowed to resize window
+    if ((end - start) !== this.props.windowWidth) {
+      this.programmaticallyBrush = true;
+      // don't allow the brush to move past what it is currently
+      x1 = this.phasesScale(this.props.selectedPhase.start);
+      x2 = this.phasesScale(this.props.selectedPhase.end);
+      this.brushContainer.call(this.brush.move, [x1, x2]);
+      return;
+    }
+
+    // else propagate up because window is being moved
+    this.props.moveWindow(start, end);
   }
 
   render() {

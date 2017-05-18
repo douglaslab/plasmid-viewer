@@ -15,11 +15,12 @@ class App extends Component {
       features: [],
       sequence: '',
       strand: 'double', // can be single or double
-      windowWidth: 20, // number of translated protein sequence to show
+      windowWidth: 18, // number of translated protein sequence to show
       selectedPhase: {},
     };
 
     this.selectPhase = this.selectPhase.bind(this);
+    this.moveWindow = this.moveWindow.bind(this);
   }
 
   componentWillMount() {
@@ -46,6 +47,7 @@ class App extends Component {
       start: 0,
       end: Math.min(this.state.windowWidth, features[0].translation.length),
     };
+    console.log(selectedPhase)
 
     this.setState({features, sequence, selectedPhase});
   }
@@ -56,18 +58,25 @@ class App extends Component {
       start: 0,
       end: Math.min(this.state.windowWidth, phase.translation.length),
     };
+    console.log(selectedPhase)
+    this.setState({selectedPhase});
+  }
+
+  moveWindow(start, end) {
+    var selectedPhase = Object.assign(this.state.selectedPhase, {start, end});
     this.setState({selectedPhase});
   }
 
   render() {
     var interactionProps = {
-      selectPhase: this.selectPhase
+      selectPhase: this.selectPhase,
+      moveWindow: this.moveWindow,
     };
 
     return (
       <div className="App">
         <Overview {...interactionProps} {...this.state} />
-        <Detail {...this.state} />
+        <Detail {...interactionProps} {...this.state} />
       </div>
     );
   }
