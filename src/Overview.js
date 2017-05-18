@@ -20,10 +20,19 @@ class Overview extends Component {
     this.updateStrandOpacity();
     this.calculateArcs();
     this.renderArcs();
+
+    this.window = this.svg.append('path')
+      .classed('window', true)
+      // give it same styling as d3 brush
+      .attr('fill', 'rgb(119, 119, 119)')
+      .attr('fill-opacity', 0.3)
+      .attr('stroke', '#fff');
+    this.updateWindow();
   }
 
   componentDidUpdate() {
     this.updateStrandOpacity();
+    this.updateWindow();
   }
 
   // calculate arcs for each feature, and if the start of one arc overlaps
@@ -112,6 +121,25 @@ class Overview extends Component {
       .attr('dy', '.35em')
       .attr('font-size', fontSize - 2)
       .text(d => d.data.name);
+  }
+
+  updateWindow() {
+    var {start, end, name} = this.props.selectedPhase;
+    var {innerRadius, outerRadius, startAngle} = _.find(this.arcs, arc => arc.data.name === name);
+
+    // multiply start and end by 3, bc that start and end is the protein start/end
+    // and then convert it into radians
+    var sequenceLength = this.props.sequence.length;
+    start = (3 * start / sequenceLength) * 2 * Math.PI;
+    end = (3 * end / sequenceLength) * 2 * Math.PI;
+
+    var windowArc = {
+      innerRadius,
+      outerRadius,
+      startAngle: startAngle + start,
+      endAngle: startAngle + end,
+    };
+    this.window.attr('d', arc(windowArc));
   }
 
   render() {
