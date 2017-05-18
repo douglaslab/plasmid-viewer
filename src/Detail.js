@@ -5,36 +5,66 @@ import * as d3 from 'd3';
 var width = 800;
 var fontSize = 24;
 var markerStep = 50;
-var textWidth;
 var margin = {left: 20, top: 20};
 
 class Detail extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {updateEverything: false};
+    this.onBrush = this.onBrush.bind(this);
+  }
+
   componentDidMount() {
+    // define scales
+    var maxLength = d3.max(this.props.features, feature => feature.translation.length);
+    this.phasesScale = d3.scaleLinear()
+      .domain([0, maxLength])
+      .range([fontSize / 2, width - fontSize / 2]);
+    this.sequencesScale = d3.scaleLinear()
+      .range([0, width - fontSize / 2]);
+
     this.svg = d3.select(this.refs.svg);
     this.phases = this.svg.append('g')
       .attr('transform', 'translate(' + [0, margin.top] + ')');
-    this.markers = this.svg.append('g')
-      .attr('transform', 'translate(' + [0, margin.top] + ')');
+    this.sequences = this.svg.append('g')
+      .attr('transform', 'translate(' + [0, margin.top + 2 * fontSize] + ')');
+
     // and then add a brush
-    this.onBrush = this.onBrush.bind(this);
-    var brush = d3.brushX()
-      .extent([[fontSize / 2, margin.top], [width - fontSize / 2, margin.top + fontSize]])
+    this.brush = d3.brushX()
       .on('brush', this.onBrush);
-    this.svg.append('g')
-      .classed('brush', true)
-      .call(brush)
+    this.brushContainer = this.svg.append('g')
+      .classed('brush', true);
 
-
-    textWidth = d3.max(this.props.features, feature => feature.translation.length);
-    textWidth = (width - 2 * fontSize) / textWidth;
-
+    this.setupScaleAndBrush();
     this.renderPhase();
-    // this.renderMarkers();
+    this.renderSequences();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // update everything if the phase has changed
+    var updateEverything = nextProps.selectedPhase.name !== this.props.selectedPhase.name;
+    this.setState({updateEverything});
   }
 
   componentDidUpdate() {
-    this.renderPhase();
-    // this.renderMarkers();
+    if (this.state.updateEverything) {
+      this.renderPhase();
+      this.setupScaleAndBrush();
+    }
+
+    this.renderSequences();
+  }
+
+  setupScaleAndBrush() {
+    var seqLength = this.props.selectedPhase.end - this.props.selectedPhase.start;
+    this.sequencesScale.domain([0, seqLength]);
+
+    // when there's a new feature, make sure brush extent updates to that new feature length
+    this.brush.extent([[0, margin.top],
+      [this.phasesScale(this.feature.translation.length), margin.top + fontSize]]);
+    this.brushContainer.call(this.brush)
+      .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
   }
 
   renderPhase() {
@@ -46,34 +76,45 @@ class Detail extends Component {
     text.enter().append('text')
       .classed('phase', true)
       .attr('text-anchor', 'middle')
-      .style('font-size', fontSize)
       .attr('dy', '.35em')
+      .style('font-size', fontSize)
       .merge(text)
-      .attr('x', (d, i) => i * textWidth + fontSize)
+      .attr('x', (d, i) => this.phasesScale(i))
       .attr('y', fontSize / 2)
       .attr('fill', this.feature.arcColor)
       .text(d => d);
   }
 
-  renderMarkers() {
-    var markerData = _.times(Math.floor(this.feature.translation.length / markerStep),
-      i => this.feature.start + i * markerStep);
+  renderSequences() {
+    var {start, end} = this.props.selectedPhase;
+    var proteinSeq = this.feature.translation.slice(start, end).split('');
+    var rnaSeq = this.feature.sequence.slice(3 * start, 3 * end)
+      .replace('T', 'U').match(/.{1,3}/g);
+    var dnaSeq = this.feature.sequence.slice(3 * start, 3 * end).match(/.{1,3}/g);
+    var data = [proteinSeq, dnaSeq, rnaSeq];
+    var sequences = this.sequences.selectAll('g').data(data);
 
-    var markers = this.markers.selectAll('text')
-      .data(markerData);
+    sequences.exit().remove();
 
-    markers.exit().remove();
+    sequences = sequences.enter().append('g')
+      .classed('sequence', true)
+      .merge(sequences)
+      .attr('transform', (d, i) => 'translate(' + [0, (i + 0.5) * fontSize] + ')');
 
-    markers.enter().append('text')
-      .attr('text-anchor', 'middle')
-      .style('font-size', 10)
-      .merge(markers)
-      .attr('x', (d, i) => i * markerStep * textWidth + fontSize)
+    var text = sequences.selectAll('text').data(d => d);
+    text.exit().remove();
+    text.enter().append('text')
+      .attr('dy', '.35em')
+      .style('font-size', fontSize - 2)
+      .style('font-family', 'Courier')
+      .merge(text)
+      .attr('x', (d, i) => this.sequencesScale(i))
       .text(d => d);
   }
 
   onBrush() {
-
+    var [x1, x2] = d3.event.selection;
+    console.log(x1, x2)
   }
 
   render() {
@@ -83,17 +124,11 @@ class Detail extends Component {
       verticalAlign: 'top',
     };
     this.feature = _.find(this.props.features, feature => feature.name === this.props.selectedPhase.name);
-    var proteinSeq = this.feature.translation.slice(this.props.selectedPhase.start, this.props.selectedPhase.end);
-    var dnaSeq = this.feature.sequence.slice(this.props.selectedPhase.start * 3, this.props.selectedPhase.end * 3);
-    var rnaSeq = dnaSeq.replace('T', 'U');
 
     return (
       <div className="Detail" style={style}>
         <h3>{this.feature.name} {this.feature.product && '(' + this.feature.product + ')'}</h3>
         <svg ref='svg' width={width} />
-        <div>{proteinSeq}</div>
-        <div>{rnaSeq}</div>
-        <div>{dnaSeq}</div>
       </div>
     );
   }
