@@ -47,7 +47,6 @@ class App extends Component {
       start: 0,
       end: Math.min(this.state.windowWidth, features[0].translation.length),
     };
-    console.log(selectedPhase)
 
     this.setState({features, sequence, selectedPhase});
   }
@@ -58,7 +57,6 @@ class App extends Component {
       start: 0,
       end: Math.min(this.state.windowWidth, phase.translation.length),
     };
-    console.log(selectedPhase)
     this.setState({selectedPhase});
   }
 
