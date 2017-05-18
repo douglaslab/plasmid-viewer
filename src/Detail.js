@@ -34,8 +34,7 @@ class Detail extends Component {
     this.brush = d3.brushX()
       .on('brush', this.onBrush);
     this.brushContainer = this.svg.append('g')
-      .classed('brush', true)
-      .call(this.brush);
+      .classed('brush', true);
 
     this.setupScaleAndBrush();
     this.renderPhase();
@@ -66,6 +65,8 @@ class Detail extends Component {
       [this.phasesScale(this.feature.translation.length) + fontSize / 2, margin.top + fontSize]]);
     this.brushContainer.call(this.brush)
       .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
+    // make sure to remove brush handles so that user can't resize
+    this.brushContainer.selectAll('.handle').remove();
   }
 
   renderPhase() {
@@ -112,27 +113,10 @@ class Detail extends Component {
   }
 
   onBrush() {
-    if (this.programmaticallyBrush) {
-      // have to do this so that d3 doesn't get into infinite loop
-      this.programmaticallyBrush = false;
-      return;
-    }
-
     var [x1, x2] = d3.event.selection;
     var start = Math.floor(this.phasesScale.invert(x1));
     var end = Math.floor(this.phasesScale.invert(x2));
 
-    // user is not allowed to resize window
-    if ((end - start) !== this.props.windowWidth) {
-      this.programmaticallyBrush = true;
-      // don't allow the brush to move past what it is currently
-      x1 = this.phasesScale(this.props.selectedPhase.start);
-      x2 = this.phasesScale(this.props.selectedPhase.end);
-      this.brushContainer.call(this.brush.move, [x1, x2]);
-      return;
-    }
-
-    // else propagate up because window is being moved
     this.props.moveWindow(start, end);
   }
 
