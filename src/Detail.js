@@ -25,7 +25,7 @@ class Detail extends Component {
       .range([0, width - fontSize / 2]);
 
     this.svg = d3.select(this.refs.svg);
-    this.phases = this.svg.append('g')
+    this.phases = this.svg.append('rect')
       .attr('transform', 'translate(' + [0, margin.top] + ')');
     this.sequences = this.svg.append('g')
       .attr('transform', 'translate(' + [0, margin.top + 2 * fontSize] + ')');
@@ -62,7 +62,7 @@ class Detail extends Component {
 
     // when there's a new feature, make sure brush extent updates to that new feature length
     this.brush.extent([[0, margin.top],
-      [this.phasesScale(this.feature.translation.length) + fontSize / 2, margin.top + fontSize]]);
+      [this.phasesScale(this.feature.translation.length), margin.top + fontSize]]);
     this.brushContainer.call(this.brush)
       .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
     // make sure to remove brush handles so that user can't resize
@@ -70,20 +70,9 @@ class Detail extends Component {
   }
 
   renderPhase() {
-    var text = this.phases.selectAll('text')
-      .data(this.feature.translation || []);
-
-    text.exit().remove();
-
-    text.enter().append('text')
-      .classed('phase', true)
-      .attr('dy', '.35em')
-      .style('font-size', fontSize)
-      .merge(text)
-      .attr('x', (d, i) => this.phasesScale(i))
-      .attr('y', fontSize / 2)
-      .attr('fill', this.feature.arcColor)
-      .text(d => d);
+    this.phases.attr('fill', this.feature.arcColor)
+      .attr('width', this.phasesScale(this.feature.translation.length))
+      .attr('height', fontSize)
   }
 
   renderSequences() {
@@ -107,6 +96,7 @@ class Detail extends Component {
     text.enter().append('text')
       .attr('dy', '.35em')
       .style('font-size', fontSize - 2)
+      .style('font-family', 'Courier New')
       .merge(text)
       .attr('x', (d, i) => this.sequencesScale(i))
       .text(d => d);
