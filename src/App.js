@@ -52,6 +52,9 @@ class App extends Component {
   }
 
   selectPhase(phase) {
+    // if it's the same selected phase, don't update
+    if (this.state.selectedPhase.name === phase.name) return;
+
     var selectedPhase = {
       name: phase.name,
       start: 0,
