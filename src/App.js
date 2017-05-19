@@ -15,7 +15,7 @@ class App extends Component {
       features: [],
       sequence: '',
       strand: 'double', // can be single or double
-      windowWidth: 18, // number of translated protein sequence to show
+      windowWidth: 16, // number of translated protein sequence to show
       selectedPhase: {},
     };
 

@@ -89,7 +89,7 @@ class Detail extends Component {
     sequences = sequences.enter().append('g')
       .classed('sequence', true)
       .merge(sequences)
-      .attr('transform', (d, i) => 'translate(' + [0, (i + 0.5) * fontSize] + ')');
+      .attr('transform', (d, i) => 'translate(' + [0, (i + 0.5) * 1.2 * fontSize] + ')');
 
     var text = sequences.selectAll('text').data(d => d);
     var textWidth = this.sequencesScale(1) - this.sequencesScale(0);
