@@ -79,9 +79,9 @@ class Detail extends Component {
     var {start, end} = this.props.selectedPhase;
     var proteinSeq = this.feature.translation.slice(start, end).split('');
     var rnaSeq = this.feature.sequence.slice(3 * start, 3 * end)
-      .replace('T', 'U').match(/.{1,3}/g) || [];
+      .replace(/T/g, 'U').match(/.{1,3}/g) || [];
     var dnaSeq = this.feature.sequence.slice(3 * start, 3 * end).match(/.{1,3}/g) || [];
-    var data = [proteinSeq, dnaSeq, rnaSeq];
+    var data = [proteinSeq, rnaSeq, dnaSeq];
     var sequences = this.sequences.selectAll('g').data(data);
 
     sequences.exit().remove();
