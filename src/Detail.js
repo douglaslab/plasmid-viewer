@@ -20,13 +20,13 @@ class Detail extends Component {
     var maxLength = d3.max(this.props.features, feature => feature.translation.length);
     this.phasesScale = d3.scaleLinear()
       .domain([0, maxLength])
-      .range([0, width - fontSize]);
+      .range([0, width - 2 * margin.left]);
     this.sequencesScale = d3.scaleLinear()
-      .range([0, width - fontSize / 2]);
+      .range([margin.left, width - fontSize - margin.left]);
 
     this.svg = d3.select(this.refs.svg);
     this.phases = this.svg.append('rect')
-      .attr('transform', 'translate(' + [0, margin.top] + ')');
+      .attr('transform', 'translate(' + [margin.left, margin.top] + ')');
     this.sequences = this.svg.append('g')
       .attr('transform', 'translate(' + [0, margin.top + 2 * fontSize] + ')');
 
@@ -34,6 +34,7 @@ class Detail extends Component {
     this.brush = d3.brushX()
       .on('brush', this.onBrush);
     this.brushContainer = this.svg.append('g')
+      .attr('transform', 'translate(' + [margin.left, margin.top] + ')')
       .classed('brush', true);
 
     this.setupScaleAndBrush();
@@ -61,12 +62,11 @@ class Detail extends Component {
     this.sequencesScale.domain([0, seqLength]);
 
     // when there's a new feature, make sure brush extent updates to that new feature length
-    this.brush.extent([[0, margin.top],
-      [this.phasesScale(this.feature.translation.length), margin.top + fontSize]]);
+    this.brush.extent([[0, 0], [this.phasesScale(this.feature.translation.length), fontSize]]);
     this.brushContainer.call(this.brush)
       .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
     // make sure to remove brush handles so that user can't resize
-    this.brushContainer.selectAll('.handle').remove();
+    this.brushContainer.selectAll('.handle, .overlay').remove();
   }
 
   renderPhase() {
