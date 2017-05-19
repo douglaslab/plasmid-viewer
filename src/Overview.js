@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-var width = 400;
-var height = 400;
 var innerRadius = 150;
 var strandRadii = [135, 140];
 var fontSize = 20;
@@ -14,7 +12,7 @@ class Overview extends Component {
 
   componentDidMount() {
     this.svg = d3.select(this.refs.svg)
-      .append('g').attr('transform', 'translate(' + [width / 2, height / 2] + ')');
+      .append('g').attr('transform', 'translate(' + [this.props.width / 2, this.props.height / 2] + ')');
 
     this.renderStrands();
     this.updateStrandOpacity();
@@ -150,7 +148,7 @@ class Overview extends Component {
 
   render() {
     return (
-      <svg ref='svg' width={width} height={height} />
+      <svg ref='svg' width={this.props.width} height={this.props.height} />
     );
   }
 }

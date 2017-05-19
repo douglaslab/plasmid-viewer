@@ -7,6 +7,9 @@ import Detail from './Detail';
 import data from './data/data.json';
 
 var colors = d3.scaleOrdinal(d3.schemeCategory20);
+var isMobilePhone = isMobile.phone;
+var overviewWidth = isMobilePhone ? window.innerWidth : 400;
+var overviewHeight = isMobilePhone ? window.innerWidth : 400;
 
 class App extends Component {
   constructor(props) {
@@ -73,7 +76,8 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Overview {...interactionProps} {...this.state} />
+        <Overview {...interactionProps} {...this.state}
+          width={overviewWidth} height={overviewHeight} />
         <Detail {...interactionProps} {...this.state} />
       </div>
     );
