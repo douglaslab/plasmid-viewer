@@ -29,10 +29,10 @@ class App extends Component {
     var features = _.chain(data.features)
       .map(feature => {
         var {name, start, end, arcColor} = feature;
-        var subsequence = sequence.slice(start, end + 1);
+        var subsequence = sequence.slice(start-1, end); // GenBank uses 1-based indexing
         if (start > end) {
           // if start is bigger than end, it must mean the sequence wraps around
-          subsequence = sequence.slice(start) + sequence.slice(0, end + 1);
+          subsequence = sequence.slice(start-1) + sequence.slice(0, end);
         }
 
         return Object.assign(feature, {
