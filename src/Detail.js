@@ -92,13 +92,15 @@ class Detail extends Component {
       .attr('transform', (d, i) => 'translate(' + [0, (i + 0.5) * fontSize] + ')');
 
     var text = sequences.selectAll('text').data(d => d);
+    var textWidth = this.sequencesScale(1) - this.sequencesScale(0);
     text.exit().remove();
     text.enter().append('text')
       .attr('dy', '.35em')
+      .attr('text-anchor', 'middle')
       .style('font-size', fontSize - 2)
       .style('font-family', 'Courier New')
       .merge(text)
-      .attr('x', (d, i) => this.sequencesScale(i))
+      .attr('x', (d, i) => this.sequencesScale(i) + textWidth / 2)
       .text(d => d);
   }
 
