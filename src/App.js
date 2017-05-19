@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
+import isMobile from 'ismobilejs';
 
 import Overview from './Overview';
+import Model from './Model';
 import Detail from './Detail';
 import data from './data/data.json';
 
@@ -10,6 +12,8 @@ var colors = d3.scaleOrdinal(d3.schemeCategory20);
 var isMobilePhone = isMobile.phone;
 var overviewWidth = isMobilePhone ? window.innerWidth : 400;
 var overviewHeight = isMobilePhone ? window.innerWidth : 400;
+var modelWidth = isMobilePhone ? window.innerWidth : 400;
+var modelHeight = isMobilePhone ? window.innerWidth : 400;
 
 class App extends Component {
   constructor(props) {
@@ -78,6 +82,7 @@ class App extends Component {
       <div className="App">
         <Overview {...interactionProps} {...this.state}
           width={overviewWidth} height={overviewHeight} />
+        <Model {...this.state} width={overviewWidth} height={overviewHeight} />
         <Detail {...interactionProps} {...this.state} />
       </div>
     );
