@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
-import isMobile from 'ismobilejs';
 
 import Overview from './Overview';
 import Model from './Model';
@@ -9,11 +8,6 @@ import Detail from './Detail';
 import data from './data/data.json';
 
 var colors = d3.scaleOrdinal(d3.schemeCategory20);
-var isMobilePhone = isMobile.phone;
-var overviewWidth = isMobilePhone ? window.innerWidth : 400;
-var overviewHeight = isMobilePhone ? window.innerWidth : 400;
-var modelWidth = isMobilePhone ? window.innerWidth : 400;
-var modelHeight = isMobilePhone ? window.innerWidth : 400;
 
 class App extends Component {
   constructor(props) {
@@ -22,7 +16,6 @@ class App extends Component {
       features: [],
       sequence: '',
       strand: 'double', // can be single or double
-      windowWidth: 16, // number of translated protein sequence to show
       selectedPhase: {},
     };
 
@@ -52,7 +45,7 @@ class App extends Component {
     var selectedPhase = {
       name: features[0].name,
       start: 0,
-      end: Math.min(this.state.windowWidth, features[0].translation.length),
+      end: 20,
     };
 
     this.setState({features, sequence, selectedPhase});
@@ -62,7 +55,7 @@ class App extends Component {
     var selectedPhase = {
       name: phase.name,
       start: 0,
-      end: Math.min(this.state.windowWidth, phase.translation.length),
+      end: 20,
     };
     this.setState({selectedPhase});
   }
@@ -73,17 +66,16 @@ class App extends Component {
   }
 
   render() {
-    var interactionProps = {
+    var props = {
       selectPhase: this.selectPhase,
       moveWindow: this.moveWindow,
     };
 
     return (
       <div className="App">
-        <Overview {...interactionProps} {...this.state}
-          width={overviewWidth} height={overviewHeight} />
-        <Model {...this.state} width={overviewWidth} height={overviewHeight} />
-        <Detail {...interactionProps} {...this.state} />
+        <Overview {...props} {...this.state} />
+        <Model {...this.state} />
+        <Detail {...props} {...this.state} />
       </div>
     );
   }

@@ -2,16 +2,18 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
 
-var width = 800;
-var fontSize = 24;
-var markerStep = 50;
 var margin = {left: 20, top: 20};
+var defaultWidth = 1000;
+var width = window.innerWidth < defaultWidth ? window.innerWidth : defaultWidth;
+var rectHeight = 20;
+var fontSize = 14;
+var numChars = Math.floor(width / (fontSize * 0.6) / 3);
 
 class Detail extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {updateEverything: false};
+    this.state = {updateEverything: false, numChars: 20};
     this.onBrush = this.onBrush.bind(this);
   }
 
@@ -51,20 +53,19 @@ class Detail extends Component {
   componentDidUpdate() {
     if (this.state.updateEverything) {
       this.renderPhase();
-      this.setupScaleAndBrush();
+      this.setupScaleAndBrush(this.state.numChars);
     }
 
     this.renderSequences();
   }
 
   setupScaleAndBrush() {
-    var seqLength = this.props.selectedPhase.end - this.props.selectedPhase.start;
-    this.sequencesScale.domain([0, seqLength]);
+    this.sequencesScale.domain([0, numChars]);
 
     // when there's a new feature, make sure brush extent updates to that new feature length
-    this.brush.extent([[0, 0], [this.phasesScale(this.feature.translation.length), fontSize]]);
+    this.brush.extent([[0, 0], [this.phasesScale(this.feature.translation.length), rectHeight]]);
     this.brushContainer.call(this.brush)
-      .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
+      .call(this.brush.move, [0, this.phasesScale(numChars)]);;
     // make sure to remove brush handles so that user can't resize
     this.brushContainer.selectAll('.handle, .overlay').remove();
   }
@@ -72,7 +73,7 @@ class Detail extends Component {
   renderPhase() {
     this.phases.attr('fill', this.feature.arcColor)
       .attr('width', this.phasesScale(this.feature.translation.length))
-      .attr('height', fontSize)
+      .attr('height', rectHeight)
   }
 
   renderSequences() {
@@ -95,10 +96,10 @@ class Detail extends Component {
     var textWidth = this.sequencesScale(1) - this.sequencesScale(0);
     text.exit().remove();
     text.enter().append('text')
+      .classed('monotype', true)
       .attr('dy', '.35em')
       .attr('text-anchor', 'middle')
       .style('font-size', fontSize - 2)
-      .style('font-family', 'Courier New')
       .merge(text)
       .attr('x', (d, i) => this.sequencesScale(i) + textWidth / 2)
       .text(d => d);
@@ -115,7 +116,7 @@ class Detail extends Component {
   render() {
     var style = {
       display: 'inline-block',
-      width,
+      width: width,
       verticalAlign: 'top',
     };
     this.feature = _.find(this.props.features, feature => feature.name === this.props.selectedPhase.name);
