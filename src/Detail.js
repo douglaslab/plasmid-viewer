@@ -140,9 +140,11 @@ class Detail extends Component {
 
     return (
       <div className="Detail" style={style}>
-        <h3 style={{paddingLeft: margin.left, margin: 0}}>
-          {this.feature.name} {this.feature.product && '(' + this.feature.product + ')'}
-        </h3>
+        <div style={{paddingLeft: margin.left, paddingRight: margin.right}}>
+          <span style={{fontWeight: 600, fontSize: '1.2em'}}>
+            {this.feature.name} {this.feature.product && '(' + this.feature.product + ')'}
+          </span> <span style={{fontStyle: 'italic'}}>{this.feature.description}</span>
+        </div>
         <svg ref='svg' width={width} height={200} />
       </div>
     );
