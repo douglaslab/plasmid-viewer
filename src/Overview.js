@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
+var size = window.innerWidth < 500 ? window.innerWidth : 500;
+var fontSize = 20;
 var innerRadius = 150;
 var strandRadii = [135, 140];
-var fontSize = 20;
 var arcPadding = 5;
 var arc = d3.arc();
 
@@ -12,7 +13,7 @@ class Overview extends Component {
 
   componentDidMount() {
     this.svg = d3.select(this.refs.svg)
-      .append('g').attr('transform', 'translate(' + [this.props.width / 2, this.props.height / 2] + ')');
+      .append('g').attr('transform', 'translate(' + [size / 2, size / 2] + ')');
 
     this.renderStrands();
     this.updateStrandOpacity();
@@ -131,7 +132,7 @@ class Overview extends Component {
     var {start, end, name} = this.props.selectedPhase;
     var {innerRadius, outerRadius, startAngle} = _.find(this.arcs, arc => arc.data.name === name);
 
-    // multiply start and end by 3, bc that start and end is the protein start/end
+    // multiply start and end by 3, bc that start and end is the amino acid start/end
     // and then convert it into radians
     var sequenceLength = this.props.sequence.length;
     start = (3 * start / sequenceLength) * 2 * Math.PI;
@@ -148,7 +149,7 @@ class Overview extends Component {
 
   render() {
     return (
-      <svg ref='svg' width={this.props.width} height={this.props.height} />
+      <svg ref='svg' width={size} height={size} />
     );
   }
 }
