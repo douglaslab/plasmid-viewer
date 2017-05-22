@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
 
-var margin = {left: 20, top: 20};
+var margin = {left: 60, right: 20, top: 20, bottom: 20};
 var defaultWidth = 1000;
 var width = window.innerWidth < defaultWidth ? window.innerWidth : defaultWidth;
 var rectHeight = 20;
@@ -22,9 +22,9 @@ class Detail extends Component {
     var maxLength = d3.max(this.props.features, feature => feature.translation.length);
     this.phasesScale = d3.scaleLinear()
       .domain([0, maxLength])
-      .range([0, width - 2 * margin.left]);
+      .range([0, width - margin.left - margin.right]);
     this.sequencesScale = d3.scaleLinear()
-      .range([margin.left, width - fontSize - margin.left]);
+      .range([margin.left, width -  margin.right]);
 
     this.svg = d3.select(this.refs.svg);
     this.phases = this.svg.append('rect')
@@ -82,17 +82,34 @@ class Detail extends Component {
     var rnaSeq = this.feature.sequence.slice(3 * start, 3 * end)
       .replace(/T/g, 'U').match(/.{1,3}/g) || [];
     var dnaSeq = this.feature.sequence.slice(3 * start, 3 * end).match(/.{1,3}/g) || [];
-    var data = [proteinSeq, rnaSeq, dnaSeq];
-    var sequences = this.sequences.selectAll('g').data(data);
+    var data = [
+      {label: 'Peptide', seq: proteinSeq},
+      {label: 'RNA', seq: rnaSeq},
+      {label: 'DNA', seq: dnaSeq},
+    ];
+    var sequences = this.sequences.selectAll('.sequence').data(data);
 
     sequences.exit().remove();
 
-    sequences = sequences.enter().append('g')
-      .classed('sequence', true)
-      .merge(sequences)
-      .attr('transform', (d, i) => 'translate(' + [0, (i + 0.5) * 1.2 * fontSize] + ')');
+    var enter = sequences.enter().append('g')
+      .classed('sequence', true);
+    enter.append('text')
+      .classed('label', true)
+      .attr('x', margin.left - 2)
+      .attr('text-anchor', 'end')
+      .attr('dy', '.35em')
+      .attr('font-weight', 600)
+      .attr('fill', '#999')
+      .attr('font-size', fontSize)
+      .text(d => d.label);
+    enter.append('g')
+      .classed('seq', true);
 
-    var text = sequences.selectAll('text').data(d => d);
+    sequences = enter.merge(sequences)
+      .attr('transform', (d, i) => 'translate(' + [0, (i + 0.5) * 1.5 * fontSize] + ')');
+
+    var text = sequences.select('.seq')
+      .selectAll('text').data(d => d.seq);
     var textWidth = this.sequencesScale(1) - this.sequencesScale(0);
     text.exit().remove();
     text.enter().append('text')
@@ -123,8 +140,10 @@ class Detail extends Component {
 
     return (
       <div className="Detail" style={style}>
-        <h3>{this.feature.name} {this.feature.product && '(' + this.feature.product + ')'}</h3>
-        <svg ref='svg' width={width} />
+        <h3 style={{paddingLeft: margin.left, margin: 0}}>
+          {this.feature.name} {this.feature.product && '(' + this.feature.product + ')'}
+        </h3>
+        <svg ref='svg' width={width} height={200} />
       </div>
     );
   }
