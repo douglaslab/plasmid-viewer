@@ -60,12 +60,13 @@ class Detail extends Component {
   }
 
   setupScaleAndBrush() {
-    this.sequencesScale.domain([0, numChars]);
+    var seqLength = Math.min(this.feature.translation.length, numChars);
+    this.sequencesScale.domain([0, seqLength]);
 
     // when there's a new feature, make sure brush extent updates to that new feature length
     this.brush.extent([[0, 0], [this.phasesScale(this.feature.translation.length), rectHeight]]);
     this.brushContainer.call(this.brush)
-      .call(this.brush.move, [0, this.phasesScale(numChars)]);;
+      .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
     // make sure to remove brush handles so that user can't resize
     this.brushContainer.selectAll('.handle, .overlay').remove();
   }
