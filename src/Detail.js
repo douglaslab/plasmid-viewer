@@ -28,15 +28,15 @@ class Detail extends Component {
 
     this.svg = d3.select(this.refs.svg);
     this.phases = this.svg.append('rect')
-      .attr('transform', 'translate(' + [margin.left, margin.top] + ')');
+      .attr('transform', 'translate(' + [margin.left, 0] + ')');
     this.sequences = this.svg.append('g')
-      .attr('transform', 'translate(' + [0, margin.top + 2 * fontSize] + ')');
+      .attr('transform', 'translate(' + [0, 1.5 * rectHeight] + ')');
 
     // and then add a brush
     this.brush = d3.brushX()
       .on('brush', this.onBrush);
     this.brushContainer = this.svg.append('g')
-      .attr('transform', 'translate(' + [margin.left, margin.top] + ')')
+      .attr('transform', 'translate(' + [margin.left, 0] + ')')
       .classed('brush', true);
 
     this.setupScaleAndBrush();
@@ -137,12 +137,32 @@ class Detail extends Component {
       verticalAlign: 'top',
     };
     this.feature = _.find(this.props.features, feature => feature.name === this.props.selectedPhase.name);
+    var features = _.chain(this.props.features)
+      .filter(feature => feature.product)
+      .sortBy(feature => feature.listorder)
+      .map(feature => {
+        var style = {
+          fontSize: '1.2em',
+          marginRight: 15,
+          borderBottom: feature.name === this.feature.name ? '1px solid': 'none',
+          cursor: 'pointer',
+          display: 'inline-block',
+        };
+        return (
+          <span style={style} onClick={() => this.props.selectPhase(feature)}>
+            {feature.name}
+          </span>
+        );
+      }).value();
 
     return (
       <div className="Detail" style={style}>
-        <div style={{paddingLeft: margin.left, paddingRight: margin.right}}>
-          <span style={{fontWeight: 600, fontSize: '1.2em'}}>
-            {this.feature.name} {this.feature.product && '(' + this.feature.product + ')'}
+        <div style={{paddingLeft: margin.left, paddingRight: margin.right, paddingBottom: margin.bottom}}>
+          {features}
+        </div>
+        <div style={{paddingLeft: margin.left, paddingRight: margin.right, paddingBottom: margin.bottom}}>
+          <span style={{fontWeight: 600, fontSize: '1.2em', borderBottom: '1px solid'}}>
+            {this.feature.name} ({this.feature.product})
           </span> <span style={{fontStyle: 'italic'}}>{this.feature.description}</span>
         </div>
         <svg ref='svg' width={width} height={200} />
