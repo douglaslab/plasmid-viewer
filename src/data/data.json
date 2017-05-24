@@ -120,7 +120,7 @@
 "arcStep": 0,
 "labelStep": 0,
 "translation": ""},
-{"name": "lacZalpha",
+{"name": "lacZα",
 "product": "beta-galactosidase alpha fragment",
 "description": "enables 'blue-white' selection of cloned inserts",
 "listorder": 14,
@@ -138,6 +138,7 @@
 "end": 6286,
 "arcColor": "#e377c2",
 "arcStep": 1,
-"labelStep": 2,
-"translation": ""}]
+"labelStep": 3,
+"translation": ""}
+]
 }
