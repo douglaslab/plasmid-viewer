@@ -138,29 +138,9 @@ class Detail extends Component {
       verticalAlign: 'top',
     };
     this.feature = _.find(this.props.features, feature => feature.name === this.props.selectedPhase.name);
-    var features = _.chain(this.props.features)
-      .filter(feature => feature.product)
-      .sortBy(feature => feature.listorder)
-      .map(feature => {
-        var style = {
-          fontSize: '1.2em',
-          marginRight: 15,
-          borderBottom: feature.name === this.feature.name ? '1px solid': 'none',
-          cursor: 'pointer',
-          display: 'inline-block',
-        };
-        return (
-          <span style={style} onClick={() => this.props.selectPhase(feature)}>
-            {feature.name}
-          </span>
-        );
-      }).value();
 
     return (
       <div className="Detail" style={style}>
-        <div style={{paddingLeft: margin.left, paddingRight: margin.right, paddingBottom: margin.bottom}}>
-          {features}
-        </div>
         <div style={{paddingLeft: margin.left, paddingRight: margin.right, paddingBottom: margin.bottom}}>
           <span style={{fontWeight: 600, fontSize: '1.2em', borderBottom: '1px solid'}}>
             {this.feature.name} ({this.feature.product})

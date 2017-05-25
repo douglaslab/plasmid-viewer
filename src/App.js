@@ -70,11 +70,31 @@ class App extends Component {
       selectPhase: this.selectPhase,
       moveWindow: this.moveWindow,
     };
+    // a list of selectable features
+    var features = _.chain(this.state.features)
+      .sortBy(feature => feature.listorder)
+      .map(feature => {
+        var style = {
+          fontSize: '1.2em',
+          marginRight: 15,
+          borderBottom: this.state.selectedPhase.name === feature.name ? '1px solid': 'none',
+          cursor: 'pointer',
+          display: 'inline-block',
+        };
+        return (
+          <span style={style} onClick={() => this.selectPhase(feature)}>
+            {feature.name}
+          </span>
+        );
+      }).value();
 
     return (
       <div className="App">
         <Overview {...props} {...this.state} />
         <Model {...this.state} />
+        <div style={{paddingLeft: 60, paddingRight: 20, paddingBottom: 20}}>
+          {features}
+        </div>
         <Detail {...props} {...this.state} />
       </div>
     );
