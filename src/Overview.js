@@ -75,22 +75,12 @@ class Overview extends Component {
 
   // DNA strands
   renderStrands() {
-    // def for text on circular path
-    var defs = this.svg.append('defs');
-    defs.selectAll('path')
-      .data(strandRadii).enter().append('path')
-      .attr('id', (d, i) => 'textPath' + i)
-      .attr('d', d => 'M' + [0, 0] + ' A' + [d, d, 0, 1, 1, 0, 0.01])
-      // for some reason SVG path arcs start at 180deg so rotate it 90deg to start at top
-      .attr('transform', d => 'rotate(90)translate(' + [-d, 0] + ')');
-
     this.strands = this.svg.selectAll('.strand')
-      .data(strandRadii).enter().append('text')
+      .data(strandRadii).enter().append('circle')
       .classed('strand', true)
-      .append('textPath')
-      .attr('xlink:href', (d, i) => '#textPath' + i)
-      .attr('font-size', 1)
-      .text(this.props.sequence);
+      .attr('r', d => d)
+      .attr('fill', 'none')
+      .attr('stroke', '#cfcfcf');
   }
 
   updateStrandOpacity() {
