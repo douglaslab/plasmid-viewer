@@ -109,9 +109,9 @@ class Overview extends Component {
       .attr('d', arc)
       .attr('fill', d => d.data.arcColor)
       .attr('fill-opacity', 0.75)
-      .style('cursor', d => d.data.product ? 'pointer' : 'default')
+      .style('cursor', 'pointer')
       // only trigger click event if it has a "product" defined, and not already selected
-      .on('click', d => d.data.product && this.props.selectedPhase.name !== d.data.name ?
+      .on('click', d => this.props.selectedPhase.name !== d.data.name ?
         this.props.selectPhase(d.data) : null);
 
     this.svg.selectAll('.label')
@@ -123,8 +123,8 @@ class Overview extends Component {
       .attr('dy', '.35em')
       .attr('font-size', fontSize - 2)
       .text(d => d.data.name)
-      .style('cursor', d => d.data.product ? 'pointer' : 'default')
-      .on('click', d => d.data.translation && this.props.selectedPhase.name !== d.data.name ?
+      .style('cursor', 'pointer')
+      .on('click', d => this.props.selectedPhase.name !== d.data.name ?
         this.props.selectPhase(d.data) : null);
   }
 

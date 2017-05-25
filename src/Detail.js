@@ -19,7 +19,8 @@ class Detail extends Component {
 
   componentDidMount() {
     // define scales
-    var maxLength = d3.max(this.props.features, feature => feature.translation.length);
+    var maxLength = d3.max(this.props.features, feature =>
+      feature.translation.length || (feature.sequence.length / 3));
     this.phasesScale = d3.scaleLinear()
       .domain([0, maxLength])
       .range([0, width - margin.left - margin.right]);
@@ -60,11 +61,12 @@ class Detail extends Component {
   }
 
   setupScaleAndBrush() {
-    var seqLength = Math.min(this.feature.translation.length, numChars);
+    var translationLength = this.feature.translation.length || (this.feature.sequence.length / 3);
+    var seqLength = Math.min(translationLength, numChars);
     this.sequencesScale.domain([0, seqLength]);
 
     // when there's a new feature, make sure brush extent updates to that new feature length
-    this.brush.extent([[0, 0], [this.phasesScale(this.feature.translation.length), rectHeight]]);
+    this.brush.extent([[0, 0], [this.phasesScale(translationLength), rectHeight]]);
     this.brushContainer.call(this.brush)
       .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
     // make sure to remove brush handles so that user can't resize
@@ -72,14 +74,16 @@ class Detail extends Component {
   }
 
   renderPhase() {
+    var translationLength = this.feature.translation.length || (this.feature.sequence.length / 3);
     this.phases.attr('fill', this.feature.arcColor)
-      .attr('width', this.phasesScale(this.feature.translation.length))
+      .attr('width', this.phasesScale(translationLength))
       .attr('height', rectHeight)
   }
 
   renderSequences() {
     var {start, end} = this.props.selectedPhase;
-    var proteinSeq = this.feature.translation.slice(start, end).split('');
+    var proteinSeq = this.feature.translation &&
+      this.feature.translation.slice(start, end).split('');
     var rnaSeq = this.feature.sequence.slice(3 * start, 3 * end)
       .replace(/T/g, 'U').match(/.{1,3}/g) || [];
     var dnaSeq = this.feature.sequence.slice(3 * start, 3 * end).match(/.{1,3}/g) || [];
@@ -143,7 +147,7 @@ class Detail extends Component {
       <div className="Detail" style={style}>
         <div style={{paddingLeft: margin.left, paddingRight: margin.right, paddingBottom: margin.bottom}}>
           <span style={{fontWeight: 600, fontSize: '1.2em', borderBottom: '1px solid'}}>
-            {this.feature.name} ({this.feature.product})
+            {this.feature.name} {this.feature.product && ' (' + this.feature.product + ')'}
           </span> <span style={{fontStyle: 'italic'}}>{this.feature.description}</span>
         </div>
         <svg ref='svg' width={width} height={200} />
