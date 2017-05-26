@@ -8,8 +8,15 @@ var innerRadius = 150;
 var strandRadii = [135, 140];
 var arcPadding = 5;
 var arc = d3.arc();
+var drag = d3.drag();
 
 class Overview extends Component {
+
+  constructor(props) {
+    super(props);
+    this.moveWindow = this.moveWindow.bind(this);
+    drag.on('drag', this.moveWindow);
+  }
 
   componentDidMount() {
     this.svg = d3.select(this.refs.svg)
@@ -25,7 +32,9 @@ class Overview extends Component {
       // give it same styling as d3 brush
       .attr('fill', 'rgb(119, 119, 119)')
       .attr('fill-opacity', 0.3)
-      .attr('stroke', '#fff');
+      .attr('stroke', '#fff')
+      .style('cursor', 'move')
+      .call(drag);
     this.updateWindow();
   }
 
@@ -135,6 +144,36 @@ class Overview extends Component {
       endAngle: startAngle + end,
     };
     this.window.attr('d', arc(windowArc));
+  }
+
+  moveWindow() {
+    var {start, end, name} = this.props.selectedPhase;
+    var diff = (end - start) * 3;
+    var feature = _.find(this.props.features, feature => feature.name === name);
+
+    var [x, y] = d3.mouse(this.svg.node());
+    var percent = Math.atan2(y, x) + Math.PI / 2;
+    percent = percent / (2 * Math.PI);
+    var seqLength = this.props.sequence.length;
+
+    var middle = seqLength * percent;
+    if (middle < 0) {
+      middle = seqLength - middle;
+    }
+    middle = Math.floor(middle);
+    var start = middle - feature.start;
+    // console.log(feature.start, middle, start)
+    // if (middle < feature.start) {
+    //   // if it loops around, start should be total - start + middle
+    //   start = (seqLength - feature.start) + middle;
+    // }
+    var end = start + diff;
+
+    if (start >= 0 && end <= feature.sequence.length) {
+      start = Math.floor(start / 3);
+      end = Math.floor(end / 3);
+      this.props.moveWindow(start, end);
+    }
   }
 
   render() {
