@@ -29,13 +29,20 @@ class Detail extends Component {
       .domain([0, maxLength])
       .range([0, width - margin.left - margin.right]);
     this.sequencesScale = d3.scaleLinear()
-      .range([margin.left, width -  margin.right]);
+      .range([margin.left, width - margin.right]);
 
     this.svg = d3.select(this.refs.svg);
     this.phases = this.svg.append('rect')
       .attr('transform', 'translate(' + [margin.left, 0] + ')');
     this.sequences = this.svg.append('g')
       .attr('transform', 'translate(' + [0, 1.5 * rectHeight] + ')');
+    this.annotations = this.svg.append('g')
+      .attr('transform', 'translate(' + [0, 1.5 * rectHeight + 5 * fontSize] + ')')
+      .attr('clip-path', 'url(#clip-rect)');
+    this.annotationClip = this.annotations.append('defs')
+      .append('clipPath').attr('id', 'clip-rect')
+      .append('rect').attr('x', margin.left)
+      .attr('width', width - margin.left - margin.right);
 
     // and then add a brush
     this.brush = d3.brushX()
@@ -47,6 +54,7 @@ class Detail extends Component {
     this.setupScaleAndBrush();
     this.renderPhase();
     this.renderSequences();
+    this.renderAnnotations();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,6 +70,7 @@ class Detail extends Component {
     }
 
     this.renderSequences();
+    this.renderAnnotations();
   }
 
   setupScaleAndBrush() {
@@ -141,6 +150,62 @@ class Detail extends Component {
       .text(d => d);
   }
 
+  renderAnnotations() {
+    var maxStep = d3.max(this.feature.annotations, annotation => annotation.step) || 0;
+    this.annotationClip.attr('height', (maxStep + 1) * (fontSize + 2));
+
+    var {start, end} = this.props.selectedPhase;
+    start = this.feature.start + start * 3;
+    end = this.feature.start + end * 3;
+    var annotationsData = _.filter(this.feature.annotations, annotation =>
+      (start <= annotation.start && annotation.start <= end) ||
+      (start <= annotation.end && annotation.start <= end));
+
+    var annotations = this.annotations.selectAll('.annotation')
+      .data(annotationsData);
+
+    annotations.exit().remove();
+
+    var enter = annotations.enter().append('g')
+      .classed('annotation', true);
+
+    enter.append('rect')
+      .attr('height', fontSize + 2);
+    enter.append('text')
+      .classed('monotype', true)
+      .attr('y', fontSize / 2 + 1)
+      .attr('dy', '.35em')
+      .attr('font-size', fontSize);
+
+    annotations = enter.merge(annotations)
+      .attr('transform', d => {
+        // if annotation starts before window start, then just render at 0
+        var x = Math.max((d.start - start) / 3, 0);
+        x = this.sequencesScale(x);
+        var y = d.step * (fontSize + 2);
+        return 'translate(' + [x, y] + ')';
+      });
+
+    annotations.select('rect')
+      .attr('fill', d => d.color || '#000')
+      .attr('width', d => {
+        // only draw width for within window (add 1 bc include end)
+        var width = Math.min(d.end, end) + 1 - Math.max(d.start, start);
+        d.width = this.sequencesScale(width / 3) - this.sequencesScale(0);
+        return d.width;
+      });
+    annotations.select('text')
+      .text(d => d.text)
+      .attr('x', function(d) {
+        var diff = d.width - this.getBoundingClientRect().width;
+        if (d.start < start && diff < 0) {
+          // if annotation start is off screen, align at end
+          return diff - 2;
+        }
+        return 2;
+      });
+  }
+
   onBrush() {
     var [x1, x2] = d3.event.selection;
     var start = Math.floor(this.phasesScale.invert(x1));
@@ -155,7 +220,13 @@ class Detail extends Component {
       width: width,
       verticalAlign: 'top',
     };
-    this.feature = _.find(this.props.features, feature => feature.name === this.props.selectedPhase.name);
+
+    this.feature = _.find(this.props.features, feature =>
+      feature.name === this.props.selectedPhase.name);
+
+    var maxStep = d3.max(this.feature.annotations, annotation => annotation.step) || 0;
+    var height = 1.5 * rectHeight + 6 * fontSize + (maxStep + 1) * (fontSize + 2);
+
     var colorMaps = _.map(this.props.colors, color => {
       var style = {
         marginRight: 5,
@@ -180,7 +251,7 @@ class Detail extends Component {
           <br />
           color by: {colorMaps}
         </div>
-        <svg ref='svg' width={width} height={200} />
+        <svg ref='svg' width={width} height={height} />
       </div>
     );
   }
