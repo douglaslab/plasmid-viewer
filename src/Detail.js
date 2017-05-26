@@ -13,8 +13,12 @@ class Detail extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {updateEverything: false, numChars: 20};
+    this.state = {updateEverything: false, numChars: 20, colorBy: ''};
     this.onBrush = this.onBrush.bind(this);
+  }
+
+  componentWillMount() {
+    this.setState({colorBy: this.props.colors[0].colors});
   }
 
   componentDidMount() {
@@ -123,7 +127,11 @@ class Detail extends Component {
       .attr('text-anchor', 'middle')
       .style('font-size', fontSize - 2)
       .merge(text)
-      .attr('x', (d, i) => this.sequencesScale(i) + textWidth / 2)
+      .attr('fill', (d, i) => {
+        if (!this.state.colorBy || !proteinSeq.length) return '#000';
+        var peptide = proteinSeq[i];
+        return this.state.colorBy[peptide] || '#000';
+      }).attr('x', (d, i) => this.sequencesScale(i) + textWidth / 2)
       .text(d => d);
   }
 

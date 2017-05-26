@@ -6,13 +6,13 @@ import Overview from './Overview';
 import Model from './Model';
 import Detail from './Detail';
 import data from './data/data.json';
-
-var colors = d3.scaleOrdinal(d3.schemeCategory20);
+import colors from './data/colors.json';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      colors,
       features: [],
       sequence: '',
       strand: 'double', // can be single or double
@@ -26,6 +26,7 @@ class App extends Component {
   componentWillMount() {
     // go through the features and attach corresponding DNA sequence
     var sequence = data.sequence;
+    var arcColors = d3.scaleOrdinal(d3.schemeCategory20);
     var features = _.chain(data.features)
       .map(feature => {
         var {name, start, end, arcColor} = feature;
@@ -37,7 +38,7 @@ class App extends Component {
 
         return Object.assign(feature, {
           sequence: subsequence,
-          arcColor: arcColor || colors(name),
+          arcColor: arcColor || arcColors(name),
         });
       }).filter().value();
 
