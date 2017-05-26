@@ -9,10 +9,12 @@ class Model extends Component {
       width: size,
       height: size,
       display: 'inline-block',
+      position: 'relative',
     };
 
     return (
-      <div style={style} />
+      <div style={style} className='viewer_3Dmoljs'
+        data-pdb='2POR' data-backgroundcolor='0xffffff' data-style='stick' />
     );
   }
 }
