@@ -76,7 +76,7 @@ class Detail extends Component {
   setupScaleAndBrush() {
     var translationLength = this.feature.sequence.length / 3;
     var seqLength = Math.min(translationLength, numChars);
-    this.sequencesScale.domain([0, seqLength]);
+    this.sequencesScale.domain([0, numChars]);
 
     // when there's a new feature, make sure brush extent updates to that new feature length
     this.brush.extent([[0, 0], [this.phasesScale(translationLength), rectHeight]]);
