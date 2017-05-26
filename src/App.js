@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
+import {interpolateSpectral} from 'd3-scale-chromatic';
 
 import Overview from './Overview';
 import Model from './Model';
@@ -11,6 +12,12 @@ import colors from './data/colors.json';
 class App extends Component {
   constructor(props) {
     super(props);
+
+    // since color by position is a gradient, programmatically add it
+    colors.push({
+      name: 'position',
+      colors: interpolateSpectral,
+    });
     this.state = {
       colors,
       features: [],
@@ -81,6 +88,7 @@ class App extends Component {
           borderBottom: this.state.selectedPhase.name === feature.name ? '1px solid': 'none',
           cursor: 'pointer',
           display: 'inline-block',
+          color: '#56A9F6',
         };
         return (
           <span style={style} onClick={() => this.selectPhase(feature)}>

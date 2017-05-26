@@ -18,7 +18,7 @@ class Detail extends Component {
   }
 
   componentWillMount() {
-    this.setState({colorBy: this.props.colors[0].colors});
+    this.setState({colorBy: this.props.colors[0]});
   }
 
   componentDidMount() {
@@ -65,7 +65,7 @@ class Detail extends Component {
   }
 
   setupScaleAndBrush() {
-    var translationLength = this.feature.translation.length || (this.feature.sequence.length / 3);
+    var translationLength = this.feature.sequence.length / 3;
     var seqLength = Math.min(translationLength, numChars);
     this.sequencesScale.domain([0, seqLength]);
 
@@ -78,7 +78,7 @@ class Detail extends Component {
   }
 
   renderPhase() {
-    var translationLength = this.feature.translation.length || (this.feature.sequence.length / 3);
+    var translationLength = this.feature.sequence.length / 3;
     this.phases.attr('fill', this.feature.arcColor)
       .attr('width', this.phasesScale(translationLength))
       .attr('height', rectHeight)
@@ -86,6 +86,8 @@ class Detail extends Component {
 
   renderSequences() {
     var {start, end} = this.props.selectedPhase;
+
+    var translationLength = this.feature.sequence.length / 3;
     var proteinSeq = this.feature.translation &&
       this.feature.translation.slice(start, end).split('');
     var rnaSeq = this.feature.sequence.slice(3 * start, 3 * end)
@@ -128,9 +130,13 @@ class Detail extends Component {
       .style('font-size', fontSize - 2)
       .merge(text)
       .attr('fill', (d, i) => {
-        if (!this.state.colorBy || !proteinSeq.length) return '#000';
+        if (!this.state.colorBy) return '#000';
+        // if it's color by position, then pass in index out of total length to colors
+        if (this.state.colorBy.name === 'position')
+          return this.state.colorBy.colors((start + i) / translationLength);
+        // else it should be a peptide letter to color mapping
         var peptide = proteinSeq[i];
-        return this.state.colorBy[peptide] || '#000';
+        return this.state.colorBy.colors[peptide] || '#000';
       }).attr('x', (d, i) => this.sequencesScale(i) + textWidth / 2)
       .text(d => d);
   }
@@ -150,6 +156,20 @@ class Detail extends Component {
       verticalAlign: 'top',
     };
     this.feature = _.find(this.props.features, feature => feature.name === this.props.selectedPhase.name);
+    var colorMaps = _.map(this.props.colors, color => {
+      var style = {
+        marginRight: 5,
+        borderBottom: color.name === this.state.colorBy.name ? '1px solid': 'none',
+        cursor: 'pointer',
+        display: 'inline-block',
+        color: '#56A9F6',
+      };
+      return (
+        <span style={style} onClick={() => this.setState({colorBy: color})}>
+          {color.name}
+        </span>
+      );
+    });
 
     return (
       <div className="Detail" style={style}>
@@ -157,6 +177,8 @@ class Detail extends Component {
           <span style={{fontWeight: 600, fontSize: '1.2em', borderBottom: '1px solid'}}>
             {this.feature.name} {this.feature.product && ' (' + this.feature.product + ')'}
           </span> <span style={{fontStyle: 'italic'}}>{this.feature.description}</span>
+          <br />
+          color by: {colorMaps}
         </div>
         <svg ref='svg' width={width} height={200} />
       </div>
