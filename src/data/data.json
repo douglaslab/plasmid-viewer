@@ -101,49 +101,56 @@
           "color":"#cc6600",
           "start":1578,
           "end":1631,
-          "step":0
+          "step":0,
+          "arcStep":-1
         },
         {
           "text":"N1 Domain",
           "color":"#00cc00",
           "start":1632,
           "end":1832,
-          "step":0
+          "step":0,
+          "arcStep":-1
         },
         {
           "text":"Hinge Domain 1",
           "color":"#cccc00",
           "start":1833,
           "end":1934,
-          "step":0
+          "step":0,
+          "arcStep":-1
         },
         {
           "text":"N2 Domain",
           "color":"#00cc00",
           "start":1935,
           "end":2246,
-          "step":0
+          "step":0,
+          "arcStep":-1
         },
         {
           "text":"Hinge Domain 2",
           "color":"#cccc00",
           "start":2247,
           "end":2399,
-          "step":0
+          "step":0,
+          "arcStep":-1
         },
         {
           "text":"CT Domain",
           "color":"#00cc00",
           "start":2400,
           "end":2852,
-          "step":0
+          "step":0,
+          "arcStep":-1
         },
         {
           "text":"Infection Competence Segment (ICS)",
           "color":"#ff66c4",
           "start":2490,
           "end":2579,
-          "step":1
+          "step":1,
+          "arcStep":-2
         }
       ],
       "translation":"MKKLLFAIPLVVPFYSHSAETVESCLAKSHTENSFTNVWKDDKTLDRYANYEGCLWNATGVVVCTGDETQCYGTWVPIGLAIPENEGGGSEGGGSEGGGSEGGGTKPPEYGDTPIPGYTYINPLDGTYPPGTEQNPANPNPSLEESQPLNTFMFQNNRFRNRQGALTVYTGTVTQGTDPVKTYYQYTPVSSKAMYDAYWNGKFRDCAFHSGFNEDLFVCEYQGQSSDLPQPPVNAGGGSGGGSGGGSEGGGSEGGGSEGGGSEGGGSGGGSGSGDFDYEKMANANKGAMTENADENALQSDAKGKLDSVATDYGAAIDGFIGDVSGLANGNGATGDFAGSNSQMAQVGDGDNSPLMNNFRQYLPSLPQSVECRPFVFGAGKPYEFSIDCDKINLFRGVFAFLLYVATFMYVFSTFANILRNKES*"
@@ -221,35 +228,40 @@
           "color":"#cc0000",
           "start":5520,
           "end":5575,
-          "step":0
+          "step":0,
+          "arcStep":0
         },
         {
           "text":"B loop: (-) strand synth.",
           "color":"#377eb8",
           "start":5623,
           "end":5677,
-          "step":0
+          "step":0,
+          "arcStep":1
         },
         {
           "text":"C loop: (-) strand synth.",
           "color":"#377eb8",
           "start":5691,
           "end":5749,
-          "step":0
+          "step":0,
+          "arcStep":1
         },
         {
           "text":"D loop: (+) strand synth.",
           "color":"#169bbd",
           "start":5765,
           "end":5791,
-          "step":0
+          "step":0,
+          "arcStep":1
         },
         {
           "text":"E loop: (+) strand synth",
           "color":"#cc6600",
           "start":5792,
           "end":5810,
-          "step":0
+          "step":0,
+          "arcStep":1
         }
       ],
       "translation":""
