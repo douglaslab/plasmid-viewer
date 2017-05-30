@@ -3,6 +3,7 @@
     {
       "name":"II",
       "product":"pII",
+      "pdbFile": "",
       "description":"genome replication in host cytoplasm",
       "listorder":2,
       "start":6848,
@@ -16,6 +17,7 @@
     {
       "name":"X",
       "product":"pX",
+      "pdbFile": "",
       "description":"genome replication (duplicate of p2 terminal domain)",
       "listorder":10,
       "start":496,
@@ -29,6 +31,7 @@
     {
       "name":"V",
       "product":"pV",
+      "pdbFile": "1gvp.pdb",
       "description":"coats nascent ssDNA genome in cytoplasm before export",
       "listorder":5,
       "start":843,
@@ -42,6 +45,7 @@
     {
       "name":"VII",
       "product":"pVII",
+      "pdbFile": "g7p_pepfold.pdb",
       "description":"phage tail protein (5-6 copies)",
       "listorder":7,
       "start":1108,
@@ -55,6 +59,7 @@
     {
       "name":"IX",
       "product":"pIX",
+      "pdbFile": "g9p_pepfold.pdb",
       "description":"phage tail protein (5-6 copies)",
       "listorder":9,
       "start":1206,
@@ -68,6 +73,7 @@
     {
       "name":"VIII",
       "product":"pVIII",
+      "pdbFile": "1mzt.pdb",
       "description":"phage major side coat protein (~2,800 copies)",
       "listorder":8,
       "start":1301,
@@ -81,6 +87,7 @@
     {
       "name":"III",
       "product":"pIII",
+      "pdbFile": "2g3p.pdb",
       "description":"phage head protein (5-6 copies), mediates infection",
       "listorder":3,
       "start":1578,
@@ -144,6 +151,7 @@
     {
       "name":"VI",
       "product":"pVI",
+      "pdbFile": "",
       "description":"",
       "listorder":6,
       "start":2855,
@@ -157,6 +165,7 @@
     {
       "name":"I",
       "product":"pI",
+      "pdbFile": "",
       "description":"export channel, inner membrane component",
       "listorder":1,
       "start":3195,
@@ -170,6 +179,7 @@
     {
       "name":"XI",
       "product":"pXI",
+      "pdbFile": "",
       "description":"export at inner membrane (duplicate of p1 terminal domain)",
       "listorder":11,
       "start":3915,
@@ -183,6 +193,7 @@
     {
       "name":"IV",
       "product":"pIV",
+      "pdbFile": "",
       "description":"export channel (14 copies per channel), outer membrane component",
       "listorder":4,
       "start":4219,
@@ -196,6 +207,7 @@
     {
       "name":"M13ori",
       "product":"",
+      "pdbFile": "",
       "description":"start and end site for genome replication, site of export initiation",
       "listorder":12,
       "start":5487,
@@ -212,29 +224,29 @@
           "step":0
         },
         {
-          "text":"B loop: (-) strand synthesis",
+          "text":"B loop: (-) strand synth.",
           "color":"#377eb8",
           "start":5623,
           "end":5677,
           "step":0
         },
         {
-          "text":"C loop: (-) strand synthesis",
+          "text":"C loop: (-) strand synth.",
           "color":"#377eb8",
           "start":5691,
           "end":5749,
           "step":0
         },
         {
-          "text":"D loop: (+) strand synthesis",
+          "text":"D loop: (+) strand synth.",
           "color":"#169bbd",
           "start":5765,
           "end":5791,
           "step":0
         },
         {
-          "text":"E loop: (+) strand synthesis",
-          "color":"#169bbd",
+          "text":"E loop: (+) strand synth",
+          "color":"#cc6600",
           "start":5792,
           "end":5810,
           "step":0
@@ -245,6 +257,7 @@
     {
       "name":"lacZα",
       "product":"beta-galactosidase alpha fragment",
+      "pdbFile": "",
       "description":"enables 'blue-white' selection of cloned inserts",
       "listorder":14,
       "start":6216,
@@ -258,6 +271,7 @@
     {
       "name":"MCS",
       "product":"",
+      "pdbFile": "",
       "description":"multiple cloning site allows cutting of DNA prior to ligation of an insert sequence",
       "listorder":13,
       "start":6230,
