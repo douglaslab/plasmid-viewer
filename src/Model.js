@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as d3 from 'd3';
+// import * as d3 from 'd3';  // warning unused
 import _ from 'lodash';
 
 var size = window.innerWidth < 500 ? window.innerWidth : 500;
@@ -14,7 +14,7 @@ class Model extends Component {
 
     return (
       <div style={style} className='viewer_3Dmoljs'
-        data-pdb='2POR' data-backgroundcolor='0xffffff' data-style='stick' />
+        data-pdb='1GVP' data-backgroundcolor='0xffffff' data-style='cartoon:color=spectrum' />
     );
   }
 }

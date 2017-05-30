@@ -6,7 +6,7 @@ var size = window.innerWidth < 500 ? window.innerWidth : 500;
 var fontSize = 20;
 var innerRadius = 150;
 var strandRadii = [135, 140];
-var arcPadding = 5;
+// var arcPadding = 5;
 var arc = d3.arc();
 var drag = d3.drag();
 
@@ -161,18 +161,18 @@ class Overview extends Component {
       middle = seqLength - middle;
     }
     middle = Math.floor(middle);
-    var start = middle - feature.start;
+    var move_start = middle - feature.start;
     // console.log(feature.start, middle, start)
     // if (middle < feature.start) {
     //   // if it loops around, start should be total - start + middle
     //   start = (seqLength - feature.start) + middle;
     // }
-    var end = start + diff;
+    var move_end = move_start + diff;
 
-    if (start >= 0 && end <= feature.sequence.length) {
-      start = Math.floor(start / 3);
-      end = Math.floor(end / 3);
-      this.props.moveWindow(start, end);
+    if (move_start >= 0 && move_end <= feature.sequence.length) {
+      move_start = Math.floor(move_start / 3);
+      move_end = Math.floor(move_end / 3);
+      this.props.moveWindow(move_start, end);
     }
   }
 
