@@ -267,6 +267,20 @@
       "translation":""
     },
     {
+      "name":"lacI",
+      "product":"lac repressor",
+      "pdbFile": "1lbg.pdb",
+      "description":"Lactose operon repressor",
+      "listorder":14,
+      "start":5876,
+      "end":6127,
+      "arcColor":"#e377c2",
+      "arcStep":0,
+      "labelStep":0,
+      "annotations":[],
+      "translation":"MSELTHINCVALTARFPVGKPVVPAALMNRPTRGERRFAYWAPGWFFFSPVRRATADCPSPPGPERVAASGPRWFAPAGENPV*"
+    },
+    {
       "name":"lacZα",
       "product":"beta-galactosidase alpha fragment",
       "pdbFile": "",
