@@ -30,6 +30,8 @@ class Model extends Component {
     window['$'].ajax(pdbFile, {
       success: (data) => {
         viewer.addModel(data, 'pdb');
+        viewer.addSurface(1, {opacity:0.5, color:'white'});
+        viewer.setStyle({cartoon:{style:'trace', color:feature.arcColor}});
         viewer.zoomTo();
         viewer.render();
       },
