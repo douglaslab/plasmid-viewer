@@ -172,7 +172,7 @@ class Overview extends Component {
     if (move_start >= 0 && move_end <= feature.sequence.length) {
       move_start = Math.floor(move_start / 3);
       move_end = Math.floor(move_end / 3);
-      this.props.moveWindow(move_start, end);
+      this.props.moveWindow(move_start, move_end);
     }
   }
 
