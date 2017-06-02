@@ -227,7 +227,7 @@ class Detail extends Component {
     var maxStep = d3.max(this.feature.annotations, annotation => annotation.step) || 0;
     var height = 1.5 * rectHeight + 6 * fontSize + (maxStep + 1) * (fontSize + 2);
 
-    var colorMaps = _.map(this.props.colors, color => {
+    var colorMaps = _.map(this.props.colors, (color) => {
       var style = {
         marginRight: 5,
         borderBottom: color.name === this.state.colorBy.name ? '1px solid': 'none',
@@ -236,7 +236,7 @@ class Detail extends Component {
         color: '#56A9F6',
       };
       return (
-        <span style={style} onClick={() => this.setState({colorBy: color})}>
+        <span key={color.name} style={style} onClick={() => this.setState({colorBy: color})}>
           {color.name}
         </span>
       );

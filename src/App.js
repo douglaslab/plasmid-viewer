@@ -91,7 +91,7 @@ class App extends Component {
           color: '#56A9F6',
         };
         return (
-          <span style={style} onClick={() => this.selectPhase(feature)}>
+          <span key={feature.name} style={style} onClick={() => this.selectPhase(feature)}>
             {feature.name}
           </span>
         );
