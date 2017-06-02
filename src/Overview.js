@@ -153,7 +153,7 @@ class Overview extends Component {
 
     var [x, y] = d3.mouse(this.svg.node());
     var percent = Math.atan2(y, x) + Math.PI / 2;
-    percent = percent / (2 * Math.PI);
+    percent /= (2 * Math.PI);
     var seqLength = this.props.sequence.length;
 
     var middle = seqLength * percent;
