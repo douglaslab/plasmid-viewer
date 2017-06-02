@@ -78,17 +78,25 @@ class App extends Component {
       selectPhase: this.selectPhase,
       moveWindow: this.moveWindow,
     };
+
+    var featureListStyle = {
+      display:'inline-block',
+      marginTop:'110px',
+      maxWidth:'50px',
+      verticalAlign:'top'
+    };
+
     // a list of selectable features
     var features = _.chain(this.state.features)
       .sortBy(feature => feature.listorder)
       .map(feature => {
         var style = {
-          fontSize: '1.2em',
-          marginRight: 15,
+          fontSize: '1em',
+          marginRight: 20,
           borderBottom: this.state.selectedPhase.name === feature.name ? '1px solid': 'none',
           cursor: 'pointer',
           display: 'inline-block',
-          color: '#56A9F6',
+          color: feature.arcColor,
         };
         return (
           <span key={feature.name} style={style} onClick={() => this.selectPhase(feature)}>
@@ -100,10 +108,10 @@ class App extends Component {
     return (
       <div className="App">
         <Overview {...props} {...this.state} />
-        <Model {...this.state} />
-        <div style={{paddingLeft: 60, paddingRight: 20, paddingBottom: 20}}>
+        <div style={featureListStyle}>
           {features}
         </div>
+        <Model {...this.state} />
         <Detail {...props} {...this.state} />
       </div>
     );
