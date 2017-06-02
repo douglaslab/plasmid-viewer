@@ -283,7 +283,7 @@
     {
       "name":"lacZα",
       "product":"beta-galactosidase alpha fragment",
-      "pdbFile": "",
+      "pdbFile": "1jz8.pdb",
       "description":"enables 'blue-white' selection of cloned inserts",
       "listorder":14,
       "start":6216,
