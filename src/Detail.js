@@ -68,6 +68,16 @@ class Detail extends Component {
       this.renderPhase();
       this.setupScaleAndBrush(this.state.numChars);
     }
+    var [x1] = d3.brushSelection(this.brushContainer.node());
+    var {start, end} = this.props.selectedPhase;
+    var brushStart = Math.floor(this.phasesScale.invert(x1));
+    if (brushStart !== start) {
+      // if a brush in another component is being dragged
+      // make sure that the brush in Detail is updated accordingly
+      this.programmaticallyBrush = true;
+      this.brushContainer
+        .call(this.brush.move, [this.phasesScale(start), this.phasesScale(end)]);
+    }
 
     this.renderSequences();
     this.renderAnnotations();
@@ -81,7 +91,7 @@ class Detail extends Component {
     // when there's a new feature, make sure brush extent updates to that new feature length
     this.brush.extent([[0, 0], [this.phasesScale(translationLength), rectHeight]]);
     this.brushContainer.call(this.brush)
-      .call(this.brush.move, [0, this.phasesScale(seqLength)]);;
+      .call(this.brush.move, [0, this.phasesScale(seqLength)]);
     // make sure to remove brush handles so that user can't resize
     this.brushContainer.selectAll('.handle, .overlay').remove();
   }
@@ -207,6 +217,13 @@ class Detail extends Component {
   }
 
   onBrush() {
+    // if another component is programmatically setting brush
+    // then don't update, only update if Detail's brush is being moved
+    if (this.programmaticallyBrush) {
+      this.programmaticallyBrush = false;
+      return;
+    }
+
     var [x1, x2] = d3.event.selection;
     var start = Math.floor(this.phasesScale.invert(x1));
     var end = Math.floor(this.phasesScale.invert(x2));
