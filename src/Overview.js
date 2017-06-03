@@ -152,8 +152,17 @@ class Overview extends Component {
     var feature = _.find(this.props.features, feature => feature.name === name);
 
     var [x, y] = d3.mouse(this.svg.node());
-    var percent = Math.atan2(y, x) + Math.PI / 2;
-    percent /= (2 * Math.PI);
+    // multiply y by -1 bc currently it's the other way around
+    var angle = Math.atan2(-1 * y, x) - Math.PI / 2;
+    if (angle < 0) {
+      // if angle is negative must be in the 3rd & 4th quadrants, turn it positive
+      // because I want to go clockwise
+      angle *= -1;
+    } else {
+      // otherwise, must be 1st & 2nd quadrant
+      angle = 2 * Math.PI - angle;
+    }
+    var percent = angle / (2 * Math.PI);
     var seqLength = this.props.sequence.length;
 
     var middle = seqLength * percent;
