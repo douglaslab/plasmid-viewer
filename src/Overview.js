@@ -164,18 +164,14 @@ class Overview extends Component {
     }
     var percent = angle / (2 * Math.PI);
     var seqLength = this.props.sequence.length;
+    var middle = Math.floor(seqLength * percent);
 
-    var middle = seqLength * percent;
-    if (middle < 0) {
-      middle = seqLength - middle;
-    }
-    middle = Math.floor(middle);
     var move_start = middle - feature.start;
-    // console.log(feature.start, middle, start)
-    // if (middle < feature.start) {
-    //   // if it loops around, start should be total - start + middle
-    //   start = (seqLength - feature.start) + middle;
-    // }
+    if (feature.end < feature.start && move_start < 0 && percent < 0.5) {
+      // if sequence wraps around to the beginning
+      // and current start is negative BUT in the first 50% of the circle
+      move_start = (seqLength - feature.start) + middle;
+    }
     var move_end = move_start + diff;
 
     if (move_start >= 0 && move_end <= feature.sequence.length) {
