@@ -181,6 +181,18 @@ class Overview extends Component {
     if (move_start >= 0 && move_end <= feature.sequence.length) {
       move_start = Math.floor(move_start / 3);
       move_end = Math.floor(move_end / 3);
+    } else if (move_start < 0) {
+      // if it's less than start, just keep it at start
+      move_start = 0;
+      move_end = diff / 3;
+    } else {
+      // and if dragged past sequence end, don't let it go past that
+      move_end = Math.floor(feature.sequence.length / 3);
+      move_start = move_end - (diff / 3);
+    }
+
+    // only update if new start isn't the same as old start
+    if (move_start !== start) {
       this.props.moveWindow(move_start, move_end);
     }
   }
