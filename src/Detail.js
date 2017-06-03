@@ -146,7 +146,7 @@ class Detail extends Component {
       .classed('monotype', true)
       .attr('dy', '.35em')
       .attr('text-anchor', 'middle')
-      .style('font-size', fontSize - 2)
+      .attr('font-size', fontSize - 2)
       .merge(text)
       .attr('fill', (d, i) => {
         if (!this.state.colorBy) return '#000';
