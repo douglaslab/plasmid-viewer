@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
+import isMobile from 'ismobilejs';
 
 var margin = {left: 60, right: 20, top: 20, bottom: 20};
 var defaultWidth = 1000;
-var width = window.innerWidth < defaultWidth ? window.innerWidth : defaultWidth;
+var width = isMobile.any ? window.innerWidth : defaultWidth;
 var rectHeight = 20;
 var fontSize = 14;
 var numChars = Math.floor(width / (fontSize * 0.6) / 3);

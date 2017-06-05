@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import isMobile from 'ismobilejs';
 
-var size = window.innerWidth < 500 ? window.innerWidth : 500;
+var size = isMobile.phone ? window.innerWidth : 500;
 class Model extends Component {
 
   componentDidMount() {

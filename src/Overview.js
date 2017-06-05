@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
+import isMobile from 'ismobilejs';
 
-var width = window.innerWidth < 500 ? window.innerWidth : 500;
-var height = window.innerWidth < 500 ? window.innerWidth : 500;
-var fontSize = 20;
+var width = isMobile.phone ? window.innerWidth : 500;
+var height = isMobile.phone ? window.innerWidth : 500;
+var fontSize = isMobile.phone ? 16 : 20;
 var innerRadius = width * 0.33;
 var strandRadii = [innerRadius - 15, innerRadius - 10];
 // var arcPadding = 5;

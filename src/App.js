@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
+import isMobile from 'ismobilejs';
 import {interpolateSpectral} from 'd3-scale-chromatic';
 
 import Overview from './Overview';
@@ -83,7 +84,7 @@ class App extends Component {
 
     var featureListStyle = {
       display:'inline-block',
-      marginTop:'110px',
+      marginTop: isMobile.phone ? 20 : 110,
       // need to pass feature width into Overview
       // so it knows how much space to leave for feature list
       maxWidth: featureWidth,
