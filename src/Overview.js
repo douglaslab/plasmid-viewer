@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import _ from 'lodash';
 
-var size = window.innerWidth < 500 ? window.innerWidth : 500;
+var width = window.innerWidth < 500 ? window.innerWidth : 500;
+var height = window.innerWidth < 500 ? window.innerWidth : 500;
 var fontSize = 20;
-var innerRadius = 150;
-var strandRadii = [135, 140];
+var innerRadius = width * 0.33;
+var strandRadii = [innerRadius - 15, innerRadius - 10];
 // var arcPadding = 5;
 var arc = d3.arc();
 var drag = d3.drag();
@@ -18,9 +19,16 @@ class Overview extends Component {
     drag.on('drag', this.moveWindow);
   }
 
+  componentWillMount() {
+    // if there's feature list width, then subtract
+    if (this.props.featureWidth) {
+      width -= this.props.featureWidth;
+    }
+  }
+
   componentDidMount() {
     this.svg = d3.select(this.refs.svg)
-      .append('g').attr('transform', 'translate(' + [size / 2, size / 2] + ')');
+      .append('g').attr('transform', 'translate(' + [width / 2, height / 2] + ')');
 
     this.renderStrands();
     this.updateStrandOpacity();
@@ -195,7 +203,7 @@ class Overview extends Component {
 
   render() {
     return (
-      <svg ref='svg' width={size} height={size} />
+      <svg ref='svg' width={width} height={height} />
     );
   }
 }

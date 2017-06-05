@@ -74,15 +74,19 @@ class App extends Component {
   }
 
   render() {
+    var featureWidth = 50;
     var props = {
       selectPhase: this.selectPhase,
       moveWindow: this.moveWindow,
+      featureWidth,
     };
 
     var featureListStyle = {
       display:'inline-block',
       marginTop:'110px',
-      maxWidth:'50px',
+      // need to pass feature width into Overview
+      // so it knows how much space to leave for feature list
+      maxWidth: featureWidth,
       verticalAlign:'top'
     };
 
