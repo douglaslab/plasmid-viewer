@@ -20,6 +20,29 @@ class Model extends Component {
     return this.props.selectedPhase.name !== nextProps.selectedPhase.name;
   }
 
+  // colorByChanged() {
+  //   if (this.state.colorBy.name === 'position') {
+  //     this.viewer.setStyle({cartoon:{style:'trace', color:'spectrum'}});
+  //   } else {
+  //     this.viewer.setStyle({cartoon:{colorfunc: colorResN }});
+  //   }
+  // }
+
+  // brushSelectionChanged() {
+  //   start = this.state.brushStart; // fixme
+  //   end = this.state.brushEnd; // fixme
+  //   colorByChanged(); // reset to current color scheme to fix unselected residues
+  //   for (i = start; i < end; i++) { 
+  //     this.viewer.setStyle({resi:i}, {cartoon:{color:'white'}}); 
+  //   }
+  //   this.viewer.render();
+  // }
+
+  // colorResN(atom) {
+  //   // should look up color of atom.resn in current colorBy mapping
+  //   return this.state.colorBy.colors[atom.resn];
+  // }
+
   componentDidUpdate() {
     this.viewer.clear();
     var feature = _.find(this.props.features, feature =>
