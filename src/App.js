@@ -110,13 +110,16 @@ class App extends Component {
         );
       }).value();
 
+    // only include 3Dmol if not phone
+    var model = isMobile.phone ? null : (<Model {...this.state} />);
+
     return (
       <div className="App">
         <Overview {...props} {...this.state} />
         <div style={featureListStyle}>
           {features}
         </div>
-        <Model {...this.state} />
+        {model}
         <Detail {...props} {...this.state} />
       </div>
     );
