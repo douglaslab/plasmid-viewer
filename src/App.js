@@ -52,7 +52,7 @@ class App extends Component {
 
     // default selected phase to first
     var selectedPhase = {
-      name: features[0].name,
+      name: features[6].name,
       start: 0,
       end: 20,
     };
