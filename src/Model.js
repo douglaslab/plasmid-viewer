@@ -28,11 +28,13 @@ class Model extends Component {
 
     var pdbFile = require('./data/' + feature.pdbFile);
     var viewer = this.viewer;
+
     window['$'].ajax(pdbFile, {
       success: (data) => {
         viewer.addModel(data, 'pdb');
         viewer.addSurface(1, {opacity:0.5, color:'white'});
-        viewer.setStyle({cartoon:{style:'trace', color:feature.arcColor}});
+        viewer.setViewStyle({style:"outline"});
+        viewer.setStyle({cartoon:{style:'oval', color:feature.arcColor}});
         viewer.zoomTo();
         viewer.render();
       },
