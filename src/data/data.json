@@ -87,7 +87,7 @@
     {
       "name":"III",
       "product":"pIII",
-      "pdbFile": "2g3p.pdb",
+      "pdbFile": "g3p.pdb",
       "description":"phage head protein (5-6 copies), mediates infection",
       "listorder":3,
       "start":1578,
@@ -269,7 +269,7 @@
     {
       "name":"lacI",
       "product":"lac repressor",
-      "pdbFile": "1lbg.pdb",
+      "pdbFile": "1efa_edit.pdb",
       "description":"Lactose operon repressor",
       "listorder":14,
       "start":5876,
