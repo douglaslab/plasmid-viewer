@@ -5,7 +5,7 @@ import isMobile from 'ismobilejs';
 
 var margin = {left: 60, right: 20, top: 20, bottom: 20};
 var defaultWidth = 1000;
-var width = isMobile.any ? window.innerWidth : defaultWidth;
+var width = window.innerWidth < defaultWidth ? window.innerWidth : defaultWidth;
 var rectHeight = 20;
 var fontSize = 14;
 var numChars = Math.floor(width / (fontSize * 0.6) / 3);
@@ -16,6 +16,7 @@ class Detail extends Component {
 
     this.state = {updateEverything: false, numChars: 20, colorBy: ''};
     this.onBrush = this.onBrush.bind(this);
+    this.windowResize = this.windowResize.bind(this);
   }
 
   componentWillMount() {
@@ -56,6 +57,8 @@ class Detail extends Component {
     this.renderPhase();
     this.renderSequences();
     this.renderAnnotations();
+
+    window.addEventListener('resize', this.windowResize)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -67,12 +70,13 @@ class Detail extends Component {
   componentDidUpdate() {
     if (this.state.updateEverything) {
       this.renderPhase();
-      this.setupScaleAndBrush(this.state.numChars);
+      this.setupScaleAndBrush();
     }
-    var [x1] = d3.brushSelection(this.brushContainer.node());
+    var [x1, x2] = d3.brushSelection(this.brushContainer.node());
     var {start, end} = this.props.selectedPhase;
     var brushStart = Math.floor(this.phasesScale.invert(x1));
-    if (brushStart !== start) {
+    var brushEnd = Math.floor(this.phasesScale.invert(x2));
+    if (brushStart !== start || brushEnd !== end) {
       // if a brush in another component is being dragged
       // make sure that the brush in Detail is updated accordingly
       this.programmaticallyBrush = true;
@@ -228,6 +232,23 @@ class Detail extends Component {
     var [x1, x2] = d3.event.selection;
     var start = Math.floor(this.phasesScale.invert(x1));
     var end = Math.floor(this.phasesScale.invert(x2));
+
+    this.props.moveWindow(start, end);
+  }
+
+  windowResize() {
+    width = window.innerWidth < defaultWidth ? window.innerWidth : defaultWidth;
+    numChars = Math.floor(width / (fontSize * 0.6) / 3);
+
+    // update the scales
+    this.phasesScale.range([0, width - margin.left - margin.right]);
+    this.sequencesScale.domain([0, numChars]).range([margin.left, width - margin.right]);
+    // technically should let it update in componentDidUpdate
+    // but better to do it here since it's only applicable on window resize
+    this.renderPhase();
+
+    var {start} = this.props.selectedPhase;
+    var end = start + numChars;
 
     this.props.moveWindow(start, end);
   }
