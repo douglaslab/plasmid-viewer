@@ -32,9 +32,7 @@ class Model extends Component {
   //   start = this.state.brushStart; // fixme
   //   end = this.state.brushEnd; // fixme
   //   colorByChanged(); // reset to current color scheme to fix unselected residues
-  //   for (i = start; i < end; i++) { 
-  //     this.viewer.setStyle({resi:i}, {cartoon:{color:'white'}}); 
-  //   }
+  //   this.viewer.setStyle({resi:_.range(start,end)}, {cartoon:{color:'white'}}); 
   //   this.viewer.render();
   // }
 
