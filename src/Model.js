@@ -13,6 +13,7 @@ class Model extends Component {
     // to access $3Dmol, which has been bound to the global window
     // have to access it as window['$3Dmol'] instead of just $3Dmol
     this.viewer = window['$3Dmol'].createViewer(element, config);
+    this.loadModel();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -32,7 +33,7 @@ class Model extends Component {
   //   start = this.state.brushStart; // fixme
   //   end = this.state.brushEnd; // fixme
   //   colorByChanged(); // reset to current color scheme to fix unselected residues
-  //   this.viewer.setStyle({resi:_.range(start,end)}, {cartoon:{color:'white'}}); 
+  //   this.viewer.setStyle({resi:_.range(start,end)}, {cartoon:{color:'white'}});
   //   this.viewer.render();
   // }
 
@@ -42,6 +43,10 @@ class Model extends Component {
   // }
 
   componentDidUpdate() {
+    this.loadModel();
+  }
+
+  loadModel() {
     this.viewer.clear();
     var feature = _.find(this.props.features, feature =>
       feature.name === this.props.selectedPhase.name);
