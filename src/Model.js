@@ -16,26 +16,16 @@ class Model extends Component {
     this.loadModel();
   }
 
-  // colorByChanged() {
-  //
-  // }
-
-  // brushSelectionChanged() {
-  //   start = this.state.brushStart; // fixme
-  //   end = this.state.brushEnd; // fixme
-  //   colorByChanged(); // reset to current color scheme to fix unselected residues
-  //   this.viewer.setStyle({resi:_.range(start,end)}, {cartoon:{color:'white'}});
-  //   this.viewer.render();
-  // }
-
   shouldComponentUpdate(nextProps) {
     if (this.props.selectedPhase.name !== nextProps.selectedPhase.name) {
       // if selected feature has changed, reload the model
       this.loadModel();
-    } else if (this.props.colorBy.name !== nextProps.colorBy.name) {
-      this.updateColor(nextProps.colorBy);
+    }
+    if (this.props.colorBy.name !== nextProps.colorBy.name) {
+      this.updateColor(nextProps);
       this.viewer.render();
     }
+    this.updateBrushSelection(nextProps);
     return false;
   }
 
@@ -64,9 +54,9 @@ class Model extends Component {
     });
   }
 
-  updateColor(colorBy) {
+  updateColor(props) {
     // set style with color by option
-    colorBy = colorBy || this.props.colorBy;
+    var colorBy = props ? props.colorBy : this.props.colorBy;
     if (colorBy === 'position') {
         this.viewer.setStyle({cartoon: {style:'trace', color:'spectrum'}});
     } else {
@@ -74,6 +64,13 @@ class Model extends Component {
         return colorBy.colors[atom.resn];
       }}});
     }
+  }
+
+  updateBrushSelection(props) {
+    var {start, end} = (props || this.props).selectedPhase;
+    this.updateColor(props);
+    this.viewer.setStyle({resi:_.range(start, end)}, {cartoon: {color: 'white'}});
+    this.viewer.render();
   }
 
   render() {
