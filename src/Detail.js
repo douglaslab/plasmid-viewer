@@ -14,13 +14,9 @@ class Detail extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {updateEverything: false, numChars: 20, colorBy: ''};
+    this.state = {updateEverything: false, numChars: 20};
     this.onBrush = this.onBrush.bind(this);
     this.windowResize = this.windowResize.bind(this);
-  }
-
-  componentWillMount() {
-    this.setState({colorBy: this.props.colors[0]});
   }
 
   componentDidMount() {
@@ -154,13 +150,13 @@ class Detail extends Component {
       .attr('font-size', fontSize - 2)
       .merge(text)
       .attr('fill', (d, i) => {
-        if (!this.state.colorBy) return '#000';
+        if (!this.props.colorBy) return '#000';
         // if it's color by position, then pass in index out of total length to colors
-        if (this.state.colorBy.name === 'position')
-          return this.state.colorBy.colors((start + i) / translationLength);
+        if (this.props.colorBy.name === 'position')
+          return this.props.colorBy.colors((start + i) / translationLength);
         // else it should be a peptide letter to color mapping
         var peptide = proteinSeq[i];
-        return this.state.colorBy.colors[peptide] || '#000';
+        return this.props.colorBy.colors[peptide] || '#000';
       }).attr('x', (d, i) => this.sequencesScale(i) + textWidth / 2)
       .text(d => d);
   }
@@ -269,13 +265,13 @@ class Detail extends Component {
     var colorMaps = _.map(this.props.colors, (color) => {
       var style = {
         marginRight: 5,
-        borderBottom: color.name === this.state.colorBy.name ? '1px solid': 'none',
+        borderBottom: color.name === this.props.colorBy.name ? '1px solid': 'none',
         cursor: 'pointer',
         display: 'inline-block',
         color: '#56A9F6',
       };
       return (
-        <span key={color.name} style={style} onClick={() => this.setState({colorBy: color})}>
+        <span key={color.name} style={style} onClick={() => this.props.updateColorBy(color)}>
           {color.name}
         </span>
       );

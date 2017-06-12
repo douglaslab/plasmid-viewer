@@ -21,6 +21,7 @@ class App extends Component {
     });
     this.state = {
       colors,
+      colorBy: colors[0],
       features: [],
       sequence: '',
       strand: 'double', // can be single or double
@@ -29,6 +30,7 @@ class App extends Component {
 
     this.selectPhase = this.selectPhase.bind(this);
     this.moveWindow = this.moveWindow.bind(this);
+    this.updateColorBy = this.updateColorBy.bind(this);
   }
 
   componentWillMount() {
@@ -74,11 +76,16 @@ class App extends Component {
     this.setState({selectedPhase});
   }
 
+  updateColorBy(colorBy) {
+    this.setState({colorBy});
+  }
+
   render() {
     var featureWidth = 50;
     var props = {
       selectPhase: this.selectPhase,
       moveWindow: this.moveWindow,
+      updateColorBy: this.updateColorBy,
       featureWidth,
     };
 
