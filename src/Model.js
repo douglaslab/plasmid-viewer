@@ -32,6 +32,9 @@ class Model extends Component {
     if (this.props.selectedPhase.name !== nextProps.selectedPhase.name) {
       // if selected feature has changed, reload the model
       this.loadModel();
+    } else if (this.props.colorBy.name !== nextProps.colorBy.name) {
+      this.updateColor(nextProps.colorBy);
+      this.viewer.render();
     }
     return false;
   }
@@ -61,9 +64,9 @@ class Model extends Component {
     });
   }
 
-  updateColor() {
+  updateColor(colorBy) {
     // set style with color by option
-    var colorBy = this.props.colorBy;
+    colorBy = colorBy || this.props.colorBy;
     if (colorBy === 'position') {
         this.viewer.setStyle({cartoon: {style:'trace', color:'spectrum'}});
     } else {
