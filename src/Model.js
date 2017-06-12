@@ -16,17 +16,8 @@ class Model extends Component {
     this.loadModel();
   }
 
-  shouldComponentUpdate(nextProps) {
-    // only update this component if the selected feature has changed
-    return this.props.selectedPhase.name !== nextProps.selectedPhase.name;
-  }
-
   // colorByChanged() {
-  //   if (this.state.colorBy.name === 'position') {
-  //     this.viewer.setStyle({cartoon:{style:'trace', color:'spectrum'}});
-  //   } else {
-  //     this.viewer.setStyle({cartoon:{colorfunc: colorResN }});
-  //   }
+  //
   // }
 
   // brushSelectionChanged() {
@@ -37,13 +28,12 @@ class Model extends Component {
   //   this.viewer.render();
   // }
 
-  // colorResN(atom) {
-  //   // should look up color of atom.resn in current colorBy mapping
-  //   return this.state.colorBy.colors[atom.resn];
-  // }
-
-  componentDidUpdate() {
-    this.loadModel();
+  shouldComponentUpdate(nextProps) {
+    if (this.props.selectedPhase.name !== nextProps.selectedPhase.name) {
+      // if selected feature has changed, reload the model
+      this.loadModel();
+    }
+    return false;
   }
 
   loadModel() {
@@ -60,7 +50,8 @@ class Model extends Component {
         viewer.addModel(data, 'pdb');
         viewer.addSurface(1, {opacity:0.5, color:'white'});
         viewer.setViewStyle({style:"outline"});
-        viewer.setStyle({cartoon:{style:'oval', color:feature.arcColor}});
+        this.updateColor();
+
         viewer.zoomTo();
         viewer.render();
       },
@@ -68,6 +59,18 @@ class Model extends Component {
         console.error( "Failed to load PDB " + pdbFile + ": " + err );
       },
     });
+  }
+
+  updateColor() {
+    // set style with color by option
+    var colorBy = this.props.colorBy;
+    if (colorBy === 'position') {
+        this.viewer.setStyle({cartoon: {style:'trace', color:'spectrum'}});
+    } else {
+      this.viewer.setStyle({cartoon: {colorfunc: function(atom) {
+        return colorBy.colors[atom.resn];
+      }}});
+    }
   }
 
   render() {
