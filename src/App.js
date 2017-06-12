@@ -17,7 +17,13 @@ class App extends Component {
     // since color by position is a gradient, programmatically add it
     colors.push({
       name: 'position',
-      colors: interpolateSpectral,
+      colors: (hue) => {
+        var pi = Math.PI;
+        var r = Math.sin(Math.PI * hue);
+        var g = Math.sin(Math.PI * (hue + 1/3));
+        var b = Math.sin(Math.PI * (hue + 2/3));
+        return 'rgb(' + [r, g, b].map(channel => Math.floor(255 * (channel * channel))) + ')';
+      },
     });
     this.state = {
       colors,
