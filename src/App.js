@@ -134,6 +134,7 @@ class App extends Component {
           {features}
         </div>
         {model}
+        <br />
         <Detail {...props} {...this.state} />
       </div>
     );
