@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
 import isMobile from 'ismobilejs';
-import {interpolateSpectral} from 'd3-scale-chromatic';
 
 import Overview from './Overview';
 import Model from './Model';
@@ -18,7 +17,6 @@ class App extends Component {
     colors.push({
       name: 'position',
       colors: (hue) => {
-        var pi = Math.PI;
         var r = Math.sin(Math.PI * hue);
         var g = Math.sin(Math.PI * (hue + 1/3));
         var b = Math.sin(Math.PI * (hue + 2/3));

@@ -88,7 +88,6 @@ class Model extends Component {
       width: 200,
       left: 0,
       right: 0,
-      margin: 'auto',
       top: size / 2,
       textAlign: 'center',
     };

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import * as d3 from 'd3';
-import isMobile from 'ismobilejs';
 
 var margin = {left: 60, right: 20, top: 20, bottom: 20};
 var defaultWidth = 1000;
