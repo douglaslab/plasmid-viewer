@@ -19,20 +19,22 @@ class Model extends Component {
   shouldComponentUpdate(nextProps) {
     if (this.props.selectedPhase.name !== nextProps.selectedPhase.name) {
       // if selected feature has changed, reload the model
-      this.loadModel();
+      this.loadModel(nextProps);
     }
     if (this.props.colorBy.name !== nextProps.colorBy.name) {
       this.updateColor(nextProps);
       this.viewer.render();
     }
     this.updateBrushSelection(nextProps);
-    return false;
+    return true;
   }
 
-  loadModel() {
+  loadModel(props) {
     this.viewer.clear();
-    var feature = _.find(this.props.features, feature =>
-      feature.name === this.props.selectedPhase.name);
+
+    props = props || this.props;
+    var feature = _.find(props.features, feature =>
+      feature.name === props.selectedPhase.name);
     if (!feature.pdbFile) return;
 
     var pdbFile = require('./data/' + feature.pdbFile);
@@ -80,9 +82,26 @@ class Model extends Component {
       display: 'inline-block',
       position: 'relative',
     };
+    var messageStyle = {
+      position: 'absolute',
+      margin: 'auto',
+      width: 200,
+      left: 0,
+      right: 0,
+      margin: 'auto',
+      top: size / 2,
+      textAlign: 'center',
+    };
+    var feature = _.find(this.props.features, feature =>
+      feature.name === this.props.selectedPhase.name);
 
     return (
-      <div ref='container' style={style} />
+      <div style={style}>
+        <div ref='container' style={style} />
+        <div style={messageStyle}>
+          {feature.pdbFile ? '' : 'No data available'}
+        </div>
+      </div>
     );
   }
 }
