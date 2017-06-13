@@ -59,8 +59,8 @@ class Model extends Component {
   updateColor(props) {
     // set style with color by option
     var colorBy = props ? props.colorBy : this.props.colorBy;
-    if (colorBy === 'position') {
-        this.viewer.setStyle({cartoon: {style:'trace', color:'spectrum'}});
+    if (colorBy.name === 'position') {
+        this.viewer.setStyle({cartoon: {color:'spectrum'}});
     } else {
       this.viewer.setStyle({cartoon: {colorfunc: function(atom) {
         return colorBy.colors[atom.resn];
