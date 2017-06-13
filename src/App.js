@@ -88,6 +88,9 @@ class App extends Component {
 
   render() {
     var featureWidth = 50;
+    var style = {
+      overflowX: 'hidden',
+    };
     var props = {
       selectPhase: this.selectPhase,
       moveWindow: this.moveWindow,
@@ -127,7 +130,7 @@ class App extends Component {
     var model = isMobile.phone ? null : (<Model {...this.state} />);
 
     return (
-      <div className="App">
+      <div className="App" style={style}>
         <Overview {...props} {...this.state} />
         <div style={featureListStyle}>
           {features}
