@@ -70,6 +70,8 @@ class Model extends Component {
 
   updateBrushSelection(props) {
     var {start, end} = (props || this.props).selectedPhase;
+    start = Math.floor(start/3)+1;  // resi start
+    end = Math.floor(end/3)+1;  // resi end
     this.updateColor(props);
     this.viewer.setStyle({resi:_.range(start, end)}, {cartoon: {color: 'white'}});
     this.viewer.render();
