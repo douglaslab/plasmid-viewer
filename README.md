@@ -4,6 +4,12 @@ This is an interactive web app for exploring plasmids at the level of DNA, RNA, 
 
 # Running locally
 
+1. Install [Node.js](https://nodejs.org/).
+1. Clone or download plasmid-viewer repo.
+1. From the terminal, cd to the plasmid-viewer directory.
+1. `npm install`
+1. `npm start`
+1. Browse to `localhost:3000`.
 
 # Building
 
