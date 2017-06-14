@@ -98,7 +98,7 @@
       "annotations":[
         {
           "text":"Signal sequence",
-          "color":"#cc6600",
+          "color":"#ffbb78",
           "start":1578,
           "end":1631,
           "step":0,
@@ -106,7 +106,7 @@
         },
         {
           "text":"N1 Domain",
-          "color":"#00cc00",
+          "color":"#96D98E",
           "start":1632,
           "end":1832,
           "step":0,
@@ -114,7 +114,7 @@
         },
         {
           "text":"Hinge Domain 1",
-          "color":"#cccc00",
+          "color":"#dbdb8d",
           "start":1833,
           "end":1934,
           "step":0,
@@ -122,7 +122,7 @@
         },
         {
           "text":"N2 Domain",
-          "color":"#00cc00",
+          "color":"#96D98E",
           "start":1935,
           "end":2246,
           "step":0,
@@ -130,7 +130,7 @@
         },
         {
           "text":"Hinge Domain 2",
-          "color":"#cccc00",
+          "color":"#dbdb8d",
           "start":2247,
           "end":2399,
           "step":0,
@@ -138,7 +138,7 @@
         },
         {
           "text":"CT Domain",
-          "color":"#00cc00",
+          "color":"#96D98E",
           "start":2400,
           "end":2852,
           "step":0,
@@ -225,7 +225,7 @@
       "annotations":[
         {
           "text":"A loop: Packaging Sequence",
-          "color":"#cc0000",
+          "color":"#d62728",
           "start":5520,
           "end":5575,
           "step":0,
@@ -233,7 +233,7 @@
         },
         {
           "text":"B loop: (-) strand synth.",
-          "color":"#377eb8",
+          "color":"#17becf",
           "start":5623,
           "end":5677,
           "step":0,
@@ -241,7 +241,7 @@
         },
         {
           "text":"C loop: (-) strand synth.",
-          "color":"#377eb8",
+          "color":"#17becf",
           "start":5691,
           "end":5749,
           "step":0,
@@ -249,7 +249,7 @@
         },
         {
           "text":"D loop: (+) strand synth.",
-          "color":"#169bbd",
+          "color":"#17becf",
           "start":5765,
           "end":5791,
           "step":0,
@@ -257,7 +257,7 @@
         },
         {
           "text":"E loop: (+) strand synth",
-          "color":"#cc6600",
+          "color":"#ffbb78",
           "start":5792,
           "end":5810,
           "step":0,
