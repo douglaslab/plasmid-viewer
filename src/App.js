@@ -17,8 +17,8 @@ class App extends Component {
     colors.push({
       name: 'position',
       colors: (hue) => {
-        var r = Math.sin(Math.PI * hue);
-        var g = Math.sin(Math.PI * (hue + 1/3));
+        var r = Math.sin(Math.PI * (hue + 1/3));
+        var g = Math.sin(Math.PI * (hue + 0));
         var b = Math.sin(Math.PI * (hue + 2/3));
         return 'rgb(' + [r, g, b].map(channel => Math.floor(255 * (channel * channel))) + ')';
       },
